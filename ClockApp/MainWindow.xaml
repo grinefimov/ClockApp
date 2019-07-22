@@ -14,16 +14,33 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Height="345" Width="345" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None">
+        Height="360" Width="345" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None" Closed="Window_Closed">
+    <Window.Resources>
+        <ContextMenu x:Key="NotifierContextMenu" Placement="MousePoint">
+            <MenuItem Header="Close" Click="CloseApp"/>
+        </ContextMenu>
+    </Window.Resources>
     <Grid>
-        <Grid Height="50" VerticalAlignment="Top" MouseDown="Grid_MouseDown">
-            <TextBlock Text="CLOCK" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" FontFamily="Champagne &amp; Limousines" Foreground="BlueViolet" />
-            <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="287,0,0,0" Click="CloseApp">
-                <materialDesign:PackIcon Kind="Multiply" Width="20" Height="20"/>
+        <Grid Height="50" VerticalAlignment="Top" MouseDown="DragMove">
+            <TextBlock></TextBlock>
+            <materialDesign:PackIcon Kind="AccessAlarms" Width="35" Height="34" Margin="10,0,0,0" VerticalAlignment="Center" Name="Icon"/>
+            <TextBlock Text="CLOCK" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="22" FontFamily="Champagne &amp; Limousines"
+                       Foreground="BlueViolet" Margin="55,0,0,0" />
+            <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="196,0,0,0"
+                    Click="MinimizeApp" ToolTip="Minimize">
+                <materialDesign:PackIcon Kind="WindowMinimize" Width="20" Height="20"/>
+            </Button>
+            <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="245,0,0,0"
+                    Click="HideWindow" ToolTip="To notification area">
+                <materialDesign:PackIcon Kind="MinusBoxOutline" Width="20" Height="20"/>
+            </Button>
+            <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="294,0,0,0"
+                    Click="CloseApp" ToolTip="Close">
+                <materialDesign:PackIcon Kind="WindowClose" Width="20" Height="20"/>
             </Button>
         </Grid>
         <Grid Margin="0 50 0 0">
-            <dragablz:TabablzControl>
+            <dragablz:TabablzControl FixedHeaderCount="3">
                 <TabItem Header="       ALARMS       ">
                     <TextBlock Text="Alarms" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </TabItem>
