@@ -49,39 +49,14 @@
 
                 </TabItem>
                 <TabItem Header="         TIMER         " IsSelected="True">
-                    <!-- piece together your own items control to create some nice stuff that will make everyone think you are cool. and rightly so, because you are cool.  you might even be a hipster for all I know -->
-                        <ItemsControl Name="ItemsControl">
-                            <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type local:TimerModel}">
-                                <md:Card Height="50" Margin="0,1,0,0">
-                                    <Grid>
-                                            <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}" VerticalAlignment="Center"
-                                                   Margin="20,0,0,0" Foreground="White">
-                                            <TextBlock Text="{Binding Number}"/>
-                                        </TextBlock>
-                                        <md:TimePicker Is24Hours="True" WithSeconds="True" Width="100" FontSize="20"
-                                                                   Margin="0,0,145,0" Foreground="White" SelectedTime="{Binding SelectedTime}" Initialized="TimePicker_Initialized"/>
-                                        <Button Content="Start" Width="70" Margin="40,0,0,0"/>
-                                        <Button Content="Reset" Width="70" Margin="195,0,0,0" IsEnabled="False" />
-                                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Height="20" Width="20" Margin="305,0,0,0" Click="TimerCloseButtonClick">
-                                            <md:PackIcon Kind="CloseOutline" Height="15" Width="15"/>
-                                        </Button>
-                                    </Grid>
-                                </md:Card>
-                                <!--<DataTemplate.Triggers>
-                                    <DataTrigger
-                                        Binding="{Binding this}"
-                                        Value="True">
-                                        <Setter
-                                            TargetName="Border"
-                                            Property="Background"
-                                            Value="{DynamicResource MaterialDesignSelection}" />
-                                    </DataTrigger>
-                                </DataTemplate.Triggers>-->
-                                </DataTemplate>
+                    <ItemsControl Name="ItemsControl">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <local:TimerView/>
+                            </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                    </TabItem>
+                </TabItem>
             </dragablz:TabablzControl>
         </Grid>
     </Grid>
