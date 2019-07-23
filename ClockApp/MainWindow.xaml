@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClockApp"
         mc:Ignorable="d"
-        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -20,24 +20,24 @@
             <MenuItem Header="Close" Click="CloseApp"/>
         </ContextMenu>
     </Window.Resources>
-    <md:DialogHost>
+    <materialDesign:DialogHost>
     <Grid>
         <Grid Height="50" VerticalAlignment="Top" MouseDown="DragMove">
             <TextBlock></TextBlock>
-            <md:PackIcon Kind="AccessAlarms" Width="35" Height="34" Margin="10,0,0,0" VerticalAlignment="Center" Name="Icon"/>
+            <materialDesign:PackIcon Kind="AccessAlarms" Width="35" Height="34" Margin="10,0,0,0" VerticalAlignment="Center" Name="Icon"/>
             <TextBlock Text="CLOCK" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="22" FontFamily="Champagne &amp; Limousines"
                        Foreground="BlueViolet" Margin="55,0,0,0" />
             <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="196,0,0,0"
                     Click="MinimizeApp" ToolTip="Minimize">
-                <md:PackIcon Kind="WindowMinimize" Width="20" Height="20"/>
+                <materialDesign:PackIcon Kind="WindowMinimize" Width="20" Height="20"/>
             </Button>
             <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="245,0,0,0"
                     Click="HideWindow" ToolTip="To notification area">
-                <md:PackIcon Kind="MinusBoxOutline" Width="20" Height="20"/>
+                <materialDesign:PackIcon Kind="MinusBoxOutline" Width="20" Height="20"/>
             </Button>
             <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="294,0,0,0"
                     Click="CloseApp" ToolTip="Close">
-                <md:PackIcon Kind="WindowClose" Width="20" Height="20"/>
+                <materialDesign:PackIcon Kind="WindowClose" Width="20" Height="20"/>
             </Button>
         </Grid>
         <Grid Margin="0 50 0 0">
@@ -49,16 +49,10 @@
 
                 </TabItem>
                 <TabItem Header="         TIMER         " IsSelected="True">
-                    <ItemsControl Name="ItemsControl">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <local:TimerView/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                    <local:TimerView/>
                 </TabItem>
             </dragablz:TabablzControl>
         </Grid>
     </Grid>
-    </md:DialogHost>
+    </materialDesign:DialogHost>
 </Window>

@@ -23,7 +23,7 @@ namespace ClockApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        private System.Windows.Forms.NotifyIcon notifier = new System.Windows.Forms.NotifyIcon();
+        private System.Windows.Forms.NotifyIcon Notifier { get; set; } = new System.Windows.Forms.NotifyIcon();
 
         public MainWindow()
         {
@@ -31,12 +31,10 @@ namespace ClockApp
 
             InitializeComponent();
 
-            ItemsControl.ItemsSource = TimerViewModel.Timers;
-
-            notifier.Icon = new System.Drawing.Icon("alarm.ico"); // this.notifier.Icon = ForumProjects.Properties.Resources.A;
-            notifier.Visible = false;
-            notifier.MouseClick += OpenWindow;
-            notifier.MouseDown += OpenNotifierContextMenu;
+            Notifier.Icon = new System.Drawing.Icon("alarm.ico"); // this.notifier.Icon = ForumProjects.Properties.Resources.A;
+            Notifier.Visible = false;
+            Notifier.MouseClick += OpenWindow;
+            Notifier.MouseDown += OpenNotifierContextMenu;
         }
 
         private void OpenNotifierContextMenu(object sender, MouseEventArgs e)
@@ -67,12 +65,12 @@ namespace ClockApp
         private void HideWindow(object sender, RoutedEventArgs e)
         {
             this.Hide();
-            notifier.Visible = true;
+            Notifier.Visible = true;
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            notifier.Visible = false;
+            Notifier.Visible = false;
         }
 
         private void OpenWindow(object sender, MouseEventArgs e)
@@ -82,7 +80,7 @@ namespace ClockApp
                 this.Show();
                 this.WindowState = WindowState.Normal;
                 Icon.Focus();
-                notifier.Visible = false;
+                Notifier.Visible = false;
             }
         }
     }
