@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClockApp"
         mc:Ignorable="d"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -14,43 +14,76 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Height="360" Width="345" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None" Closed="Window_Closed">
+        Height="347" Width="345" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None" Closed="Window_Closed">
     <Window.Resources>
         <ContextMenu x:Key="NotifierContextMenu" Placement="MousePoint">
             <MenuItem Header="Close" Click="CloseApp"/>
         </ContextMenu>
     </Window.Resources>
+    <md:DialogHost>
     <Grid>
         <Grid Height="50" VerticalAlignment="Top" MouseDown="DragMove">
             <TextBlock></TextBlock>
-            <materialDesign:PackIcon Kind="AccessAlarms" Width="35" Height="34" Margin="10,0,0,0" VerticalAlignment="Center" Name="Icon"/>
+            <md:PackIcon Kind="AccessAlarms" Width="35" Height="34" Margin="10,0,0,0" VerticalAlignment="Center" Name="Icon"/>
             <TextBlock Text="CLOCK" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="22" FontFamily="Champagne &amp; Limousines"
                        Foreground="BlueViolet" Margin="55,0,0,0" />
             <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="196,0,0,0"
                     Click="MinimizeApp" ToolTip="Minimize">
-                <materialDesign:PackIcon Kind="WindowMinimize" Width="20" Height="20"/>
+                <md:PackIcon Kind="WindowMinimize" Width="20" Height="20"/>
             </Button>
             <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="245,0,0,0"
                     Click="HideWindow" ToolTip="To notification area">
-                <materialDesign:PackIcon Kind="MinusBoxOutline" Width="20" Height="20"/>
+                <md:PackIcon Kind="MinusBoxOutline" Width="20" Height="20"/>
             </Button>
             <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="294,0,0,0"
                     Click="CloseApp" ToolTip="Close">
-                <materialDesign:PackIcon Kind="WindowClose" Width="20" Height="20"/>
+                <md:PackIcon Kind="WindowClose" Width="20" Height="20"/>
             </Button>
         </Grid>
         <Grid Margin="0 50 0 0">
             <dragablz:TabablzControl FixedHeaderCount="3">
                 <TabItem Header="       ALARMS       ">
-                    <TextBlock Text="Alarms" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    
                 </TabItem>
                 <TabItem Header="    STOPWATCH    ">
-                    <TextBlock Text="Stopwatch" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
                 </TabItem>
-                <TabItem Header="         TIMER         ">
-                    <TextBlock Text="Timer" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                </TabItem>
+                <TabItem Header="         TIMER         " IsSelected="True">
+                    <!-- piece together your own items control to create some nice stuff that will make everyone think you are cool. and rightly so, because you are cool.  you might even be a hipster for all I know -->
+                        <ItemsControl Name="ItemsControl">
+                            <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type local:TimerModel}">
+                                <md:Card Height="50" Margin="0,1,0,0">
+                                    <Grid>
+                                            <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}" VerticalAlignment="Center"
+                                                   Margin="20,0,0,0" Foreground="White">
+                                            <TextBlock Text="{Binding Number}"/>
+                                        </TextBlock>
+                                        <md:TimePicker Is24Hours="True" WithSeconds="True" Width="100" FontSize="20"
+                                                                   Margin="0,0,145,0" Foreground="White" SelectedTime="{Binding SelectedTime}" Initialized="TimePicker_Initialized"/>
+                                        <Button Content="Start" Width="70" Margin="40,0,0,0"/>
+                                        <Button Content="Reset" Width="70" Margin="195,0,0,0" IsEnabled="False" />
+                                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Height="20" Width="20" Margin="305,0,0,0" Click="TimerCloseButtonClick">
+                                            <md:PackIcon Kind="CloseOutline" Height="15" Width="15"/>
+                                        </Button>
+                                    </Grid>
+                                </md:Card>
+                                <!--<DataTemplate.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding this}"
+                                        Value="True">
+                                        <Setter
+                                            TargetName="Border"
+                                            Property="Background"
+                                            Value="{DynamicResource MaterialDesignSelection}" />
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>-->
+                                </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    </TabItem>
             </dragablz:TabablzControl>
         </Grid>
     </Grid>
+    </md:DialogHost>
 </Window>

@@ -24,11 +24,18 @@ namespace ClockApp
     public partial class MainWindow : Window
     {
         private System.Windows.Forms.NotifyIcon notifier = new System.Windows.Forms.NotifyIcon();
+        public List<TimerModel> TimersList = new List<TimerModel>()
+        {
+            new TimerModel(1),new TimerModel(2),new TimerModel(3),new TimerModel(4),new TimerModel(5)
+        };
+
         public MainWindow()
         {
             this.Title = "Clock";
 
             InitializeComponent();
+
+            ItemsControl.ItemsSource = TimersList;
 
             notifier.Icon = new System.Drawing.Icon("alarm.ico"); // this.notifier.Icon = ForumProjects.Properties.Resources.A;
             notifier.Visible = false;
@@ -82,6 +89,18 @@ namespace ClockApp
                 notifier.Visible = false;
             }
             
+        }
+
+        private void TimePicker_Initialized(object sender, EventArgs e)
+        {
+            MaterialDesignThemes.Wpf.TimePicker timePicker = (MaterialDesignThemes.Wpf.TimePicker)sender;
+            timePicker.SelectedTime = DateTime.MinValue;
+        }
+
+        private void TimerCloseButtonClick(object sender, RoutedEventArgs e)
+        {
+            TimersList.RemoveAt(0);
+            ItemsControl.ApplyTemplate();
         }
     }
 }
