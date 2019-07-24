@@ -14,6 +14,7 @@ namespace ClockApp
     public class TimerModel : INotifyPropertyChanged
     {
         private TimerStatus _status = TimerStatus.Stopped;
+        private bool _isAlarming = false;
         private bool _isStartPauseResumeButtonEnabled = false;
         private bool _isResetButtonEnabled = false;
         private int _number;
@@ -23,7 +24,6 @@ namespace ClockApp
         private ICommand _resetCommand;
         private ICommand _removeTimerCommand;
         private DateTime Time { get; set; }
-
         private System.Windows.Threading.DispatcherTimer DispatcherTimer { get; set; } = new System.Windows.Threading.DispatcherTimer();
         private TimerStatus Status
         {
@@ -48,6 +48,25 @@ namespace ClockApp
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public bool IsAlarming
+        {
+            get => _isAlarming;
+            set
+            {
+                _isAlarming = value;
+                if (value)
+                {
+                    MainWindow.Player.Play();
+                }
+
+                if (!value)
+                {
+                    MainWindow.Player.Stop();
+                }
+                OnPropertyChanged("IsAlarming");
+            }
+        }
+
         public bool StopTimer { get; set; } = false;
         public string StartPauseResumeButtonText { get; set; } = "Start";
         public bool IsStartPauseResumeButtonEnabled
@@ -102,7 +121,7 @@ namespace ClockApp
                 }
                 OnPropertyChanged("SelectedTime");
             }
-        }  
+        }
 
         public TimerModel(int number)
         {
@@ -121,6 +140,7 @@ namespace ClockApp
                 if (_timer == null)
                 {
                     _timer = (TimerModel)parameter;
+                    _timer.DispatcherTimer.Interval = new TimeSpan(0, 0, 1);
                 }
                 if (_timer.SelectedTime > DateTime.MinValue)
                 {
@@ -133,7 +153,6 @@ namespace ClockApp
                             _timer.Time = _timer.SelectedTime.GetValueOrDefault(DateTime.MinValue);
                             _timer.DispatcherTimer.Tick -= DispatcherTimer_Tick;
                             _timer.DispatcherTimer.Tick += DispatcherTimer_Tick;
-                            _timer.DispatcherTimer.Interval = new TimeSpan(0, 0, 1);
                             _timer.DispatcherTimer.Start();
                             break;
                         case TimerStatus.Started:
@@ -154,17 +173,18 @@ namespace ClockApp
                 DateTime time = _timer.SelectedTime.GetValueOrDefault(DateTime.MinValue);
                 if (_timer.StopTimer == true)
                 {
-                    _timer.DispatcherTimer.Tick -= DispatcherTimer_Tick;
+                    _timer.DispatcherTimer.Stop();
                     _timer.StopTimer = false;
                     _timer.Status = TimerStatus.Stopped;
                 }
                 else if (time.Hour == 0 && time.Minute == 0 && time.Second == 1)
                 {
-                    _timer.DispatcherTimer.Tick -= DispatcherTimer_Tick;
+                    _timer.DispatcherTimer.Stop();
                     _timer.SelectedTime = DateTime.MinValue;
                     _timer.Status = TimerStatus.Stopped;
                     _timer.IsStartPauseResumeButtonEnabled = false;
                     _timer.IsResetButtonEnabled = true;
+                    _timer.IsAlarming = true;
                 }
                 else
                 {
@@ -191,6 +211,7 @@ namespace ClockApp
                 {
                     case TimerStatus.Stopped:
                         _timer.SelectedTime = _timer.Time;
+                        _timer.IsAlarming = false;
                         break;
                     case TimerStatus.Started:
                         _timer.StopTimer = true;
@@ -224,6 +245,10 @@ namespace ClockApp
                 {
                     _timer = (TimerModel)parameter;
                 }
+                if (_timer.IsAlarming)
+                {
+                    _timer.IsAlarming = false;
+                }
                 TimerViewModel.Timers.RemoveAt(_timer.Number - 1);
                 int number = 1;
                 foreach (var t in TimerViewModel.Timers)
@@ -247,11 +272,7 @@ namespace ClockApp
 
         protected void OnPropertyChanged(string name)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(name));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
     public class TimerViewModel

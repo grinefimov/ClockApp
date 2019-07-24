@@ -25,7 +25,7 @@
         <Grid Height="50" VerticalAlignment="Top" MouseDown="DragMove">
             <TextBlock></TextBlock>
             <materialDesign:PackIcon Kind="AccessAlarms" Width="35" Height="34" Margin="10,0,0,0" VerticalAlignment="Center" Name="Icon"/>
-            <TextBlock Text="CLOCK" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="22" FontFamily="Champagne &amp; Limousines"
+            <TextBlock Text="CLOCK" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="22" FontFamily="Arial Black"
                        Foreground="BlueViolet" Margin="55,0,0,0" />
             <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="196,0,0,0"
                     Click="MinimizeApp" ToolTip="Minimize">
