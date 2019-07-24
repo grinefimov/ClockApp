@@ -1,0 +1,27 @@
+﻿<core:NotificationDisplayPart x:Class="ClockApp.CustomDisplayPart"
+                              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                              xmlns:local="clr-namespace:ClockApp"
+                              xmlns:core="clr-namespace:ToastNotifications.Core;assembly=ToastNotifications"
+                              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                              mc:Ignorable="d"  Background="{DynamicResource MaterialDesignPaper}"
+                              d:DesignHeight="60" d:DesignWidth="250"
+                              d:DataContext="{d:DesignInstance local:CustomNotification, IsDesignTimeCreatable=False}"
+                              Height="100">
+    <Grid>
+        <Border BorderBrush="#FF673AB7" BorderThickness="1,1,1,1" Padding="10">
+            <Grid>
+                <TextBlock Text="{Binding Message}" FontWeight="Light" Foreground="White" TextWrapping="Wrap" FontSize="16" Margin="10,5,0,0"
+                           FontFamily="{DynamicResource MaterialDesignFont}"/>
+                <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" VerticalAlignment="Top" HorizontalAlignment="Right"
+                        Click="CloseNotification">
+                    <materialDesign:PackIcon Kind="Close" Height="25" Width="25"/>
+                </Button>
+                <Button Name="TurnOffButton" Content="Turn Off" FontSize="12" Width="100" Margin="0,0,0,0"
+                        VerticalAlignment="Bottom" HorizontalAlignment="Center" Click="TurnOffAlarmMusic"/>
+            </Grid>
+        </Border>
+    </Grid>
+</core:NotificationDisplayPart>

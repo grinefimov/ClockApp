@@ -15,6 +15,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ToastNotifications;
+using ToastNotifications.Lifetime;
+using ToastNotifications.Position;
 using MouseEventArgs = System.Windows.Forms.MouseEventArgs;
 
 namespace ClockApp
@@ -27,6 +30,13 @@ namespace ClockApp
         private System.Windows.Forms.NotifyIcon NotificationAreaIcon { get; set; } = new System.Windows.Forms.NotifyIcon();
 
         public static MediaPlayer Player { get; set; } = new MediaPlayer();
+        public static Notifier Notifier { get; set; } = new Notifier(cfg =>
+        {
+            cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(TimeSpan.FromDays(1), MaximumNotificationCount.FromCount(10));
+            cfg.PositionProvider = new PrimaryScreenPositionProvider(Corner.BottomRight, 10, 10);
+            cfg.DisplayOptions.Width = 325;
+        });
+
         public MainWindow()
         {
             this.Title = "Clock";

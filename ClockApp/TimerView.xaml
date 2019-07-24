@@ -10,7 +10,7 @@
     <UserControl.Resources>
         <Storyboard x:Key="AlarmAnimation">
             <DoubleAnimation Storyboard.TargetName="Card" Storyboard.TargetProperty="Opacity"
-                             From="1.0" To="0.25" Duration="0:0:0.4" AutoReverse="True" RepeatBehavior="Forever" />
+                             From="1.0" To="0.3" Duration="0:0:0.4" AutoReverse="True" RepeatBehavior="Forever" />
         </Storyboard>
     </UserControl.Resources>
     <Grid>
@@ -54,7 +54,8 @@
         <Button Name="AddTimerButton" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Margin="290,205,0,0" Click="AddTimer" >
             <materialDesign:PackIcon Kind="Add" Height="25" Width="25"/>
         </Button>
-        <TextBlock Text="grinefimov" FontSize="10" Foreground="White" Panel.ZIndex="-1" Margin="0,0,0,4" VerticalAlignment="Bottom" HorizontalAlignment="Center" Opacity="0.04"/>
+        <TextBlock Text="grinefimov" FontSize="10" Foreground="White" Panel.ZIndex="-1" Margin="0,0,0,4" VerticalAlignment="Bottom"
+                   HorizontalAlignment="Center" Opacity="0.04"/>
     </Grid>
 </UserControl>
 

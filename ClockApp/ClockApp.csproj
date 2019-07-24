@@ -8,12 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="CustomDisplayPart.xaml" />
     <None Remove="TimerView.xaml" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Dragablz" Version="0.0.3.203" />
     <PackageReference Include="MaterialDesignThemes" Version="2.6.0" />
+    <PackageReference Include="ToastNotifications" Version="2.5.1" />
   </ItemGroup>
 
 </Project>

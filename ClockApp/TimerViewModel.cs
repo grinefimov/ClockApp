@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using MaterialDesignThemes.Wpf;
+using ToastNotifications.Lifetime.Clear;
 
 namespace ClockApp
 {
@@ -25,6 +26,7 @@ namespace ClockApp
         private ICommand _removeTimerCommand;
         private DateTime Time { get; set; }
         private System.Windows.Threading.DispatcherTimer DispatcherTimer { get; set; } = new System.Windows.Threading.DispatcherTimer();
+        private bool IsBackward { get; set; } = false;
         private TimerStatus Status
         {
             get => _status;
@@ -56,7 +58,9 @@ namespace ClockApp
                 _isAlarming = value;
                 if (value)
                 {
+                    MainWindow.Player.Stop();
                     MainWindow.Player.Play();
+                    MainWindow.Notifier.ShowCustomMessage("Timer " + Number + ": Time is up!!!");
                 }
 
                 if (!value)
@@ -113,10 +117,14 @@ namespace ClockApp
                 }
                 else
                 {
-                    IsStartPauseResumeButtonEnabled = true;
-                    if (Status == TimerStatus.Stopped)
+                    if (!IsBackward)
                     {
-                        IsResetButtonEnabled = false;
+                        IsStartPauseResumeButtonEnabled = true;
+                        if (Status == TimerStatus.Stopped)
+                        {
+
+                            IsResetButtonEnabled = false;
+                        }
                     }
                 }
                 OnPropertyChanged("SelectedTime");
@@ -134,7 +142,7 @@ namespace ClockApp
         private class StartPauseResume : ICommand
         {
             private TimerModel _timer;
-            public bool CanExecute(object parameter) { return true; }
+            public bool CanExecute(object parameter) => true;
             public void Execute(object parameter)
             {
                 if (_timer == null)
@@ -149,6 +157,7 @@ namespace ClockApp
                         case TimerStatus.Stopped:
                             _timer.Status = TimerStatus.Started;
                             _timer.StopTimer = false;
+                            _timer.IsBackward = false;
                             _timer.IsResetButtonEnabled = true;
                             _timer.Time = _timer.SelectedTime.GetValueOrDefault(DateTime.MinValue);
                             _timer.DispatcherTimer.Tick -= DispatcherTimer_Tick;
@@ -171,15 +180,15 @@ namespace ClockApp
             private void DispatcherTimer_Tick(object sender, EventArgs e)
             {
                 DateTime time = _timer.SelectedTime.GetValueOrDefault(DateTime.MinValue);
-                if (_timer.StopTimer == true)
+                if (_timer.StopTimer)
                 {
-                    _timer.DispatcherTimer.Stop();
                     _timer.StopTimer = false;
                     _timer.Status = TimerStatus.Stopped;
-                }
-                else if (time.Hour == 0 && time.Minute == 0 && time.Second == 1)
-                {
                     _timer.DispatcherTimer.Stop();
+                }
+                else if (time.Hour == 0 && time.Minute == 0 && time.Second == 1 && !_timer.IsBackward)
+                {
+                    _timer.IsBackward = true;
                     _timer.SelectedTime = DateTime.MinValue;
                     _timer.Status = TimerStatus.Stopped;
                     _timer.IsStartPauseResumeButtonEnabled = false;
@@ -188,10 +197,11 @@ namespace ClockApp
                 }
                 else
                 {
-                    _timer.SelectedTime = time.AddSeconds(-1);
+                    _timer.SelectedTime = _timer.IsBackward ? time.AddSeconds(1) : time.AddSeconds(-1);
                 }
             }
         }
+
         #endregion
 
         #region ResetCommand
@@ -200,7 +210,7 @@ namespace ClockApp
         private class Reset : ICommand
         {
             private TimerModel _timer;
-            public bool CanExecute(object parameter) { return true; }
+            public bool CanExecute(object parameter) => true;
             public void Execute(object parameter)
             {
                 if (_timer == null)
@@ -210,8 +220,12 @@ namespace ClockApp
                 switch (_timer.Status)
                 {
                     case TimerStatus.Stopped:
+                        _timer.DispatcherTimer.Stop();
                         _timer.SelectedTime = _timer.Time;
                         _timer.IsAlarming = false;
+                        _timer.IsStartPauseResumeButtonEnabled = true;
+                        _timer.IsResetButtonEnabled = false;
+                        MainWindow.Notifier.ClearMessages(new ClearByMessage("Timer " + _timer.Number + ": Time is up!!!"));
                         break;
                     case TimerStatus.Started:
                         _timer.StopTimer = true;
@@ -238,7 +252,7 @@ namespace ClockApp
         private class RemoveTimer : ICommand
         {
             private TimerModel _timer;
-            public bool CanExecute(object parameter) { return true; }
+            public bool CanExecute(object parameter) => true;
             public void Execute(object parameter)
             {
                 if (_timer == null)
@@ -248,8 +262,10 @@ namespace ClockApp
                 if (_timer.IsAlarming)
                 {
                     _timer.IsAlarming = false;
+                    MainWindow.Notifier.ClearMessages(new ClearByMessage("Timer " + _timer.Number + ": Time is up!!!"));
                 }
                 TimerViewModel.Timers.RemoveAt(_timer.Number - 1);
+                _timer.DispatcherTimer.Stop();
                 int number = 1;
                 foreach (var t in TimerViewModel.Timers)
                 {
@@ -283,5 +299,4 @@ namespace ClockApp
         };
     }
 
-
-}
+    }

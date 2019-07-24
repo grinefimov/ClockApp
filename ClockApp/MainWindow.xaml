@@ -21,38 +21,40 @@
         </ContextMenu>
     </Window.Resources>
     <materialDesign:DialogHost>
-    <Grid>
-        <Grid Height="50" VerticalAlignment="Top" MouseDown="DragMove">
-            <TextBlock></TextBlock>
-            <materialDesign:PackIcon Kind="AccessAlarms" Width="35" Height="34" Margin="10,0,0,0" VerticalAlignment="Center" Name="Icon"/>
-            <TextBlock Text="CLOCK" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="22" FontFamily="Arial Black"
-                       Foreground="BlueViolet" Margin="55,0,0,0" />
-            <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="196,0,0,0"
-                    Click="MinimizeApp" ToolTip="Minimize">
-                <materialDesign:PackIcon Kind="WindowMinimize" Width="20" Height="20"/>
-            </Button>
-            <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="245,0,0,0"
-                    Click="HideWindow" ToolTip="To notification area">
-                <materialDesign:PackIcon Kind="MinusBoxOutline" Width="20" Height="20"/>
-            </Button>
-            <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="294,0,0,0"
-                    Click="CloseApp" ToolTip="Close">
-                <materialDesign:PackIcon Kind="WindowClose" Width="20" Height="20"/>
-            </Button>
-        </Grid>
-        <Grid Margin="0 50 0 0">
-            <dragablz:TabablzControl FixedHeaderCount="3">
-                <TabItem Header="       ALARMS       ">
-                    
-                </TabItem>
-                <TabItem Header="    STOPWATCH    ">
+        <Grid>
+            <Border BorderBrush="#FF673AB7" BorderThickness="1,1,1,1">
+                <Grid Height="50" VerticalAlignment="Top" MouseDown="DragMove">
+                    <TextBlock></TextBlock>
+                    <materialDesign:PackIcon Kind="AccessAlarms" Width="35" Height="34" Margin="10,0,0,0" VerticalAlignment="Center" Name="Icon"/>
+                    <TextBlock Text="CLOCK" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="22"
+                           Foreground="#FF673AB7" Margin="55,0,0,0" FontWeight="Bold" />
+                    <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="196,0,0,0"
+                        Click="MinimizeApp" ToolTip="Minimize">
+                        <materialDesign:PackIcon Kind="WindowMinimize" Width="20" Height="20"/>
+                    </Button>
+                    <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="245,0,0,0"
+                        Click="HideWindow" ToolTip="To notification area">
+                        <materialDesign:PackIcon Kind="MinusBoxOutline" Width="20" Height="20"/>
+                    </Button>
+                    <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="294,0,0,0"
+                        Click="CloseApp" ToolTip="Close">
+                        <materialDesign:PackIcon Kind="WindowClose" Width="20" Height="20"/>
+                    </Button>
+                </Grid>
+            </Border>
+            <Grid Margin="0 50 0 0">
+                <dragablz:TabablzControl FixedHeaderCount="3">
+                    <TabItem Header="       ALARMS       ">
 
-                </TabItem>
-                <TabItem Header="         TIMER         " IsSelected="True">
-                    <local:TimerView/>
-                </TabItem>
-            </dragablz:TabablzControl>
+                    </TabItem>
+                    <TabItem Header="    STOPWATCH    ">
+
+                    </TabItem>
+                    <TabItem Header="         TIMER         " IsSelected="True">
+                        <local:TimerView/>
+                    </TabItem>
+                </dragablz:TabablzControl>
+            </Grid>
         </Grid>
-    </Grid>
     </materialDesign:DialogHost>
 </Window>
