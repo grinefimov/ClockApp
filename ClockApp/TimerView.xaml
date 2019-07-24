@@ -10,7 +10,7 @@
     <UserControl.Resources>
         <Storyboard x:Key="AlarmAnimation">
             <DoubleAnimation Storyboard.TargetName="Card" Storyboard.TargetProperty="Opacity"
-                             From="1.0" To="0.3" Duration="0:0:0.4" AutoReverse="True" RepeatBehavior="Forever" />
+                             From="1.0" To="0.35" Duration="0:0:0.4" AutoReverse="True" RepeatBehavior="Forever" />
         </Storyboard>
     </UserControl.Resources>
     <Grid>

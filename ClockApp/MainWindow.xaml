@@ -14,20 +14,26 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Height="347" Width="345" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None" Closed="Window_Closed">
+        Title="Clock" Height="347" Width="345" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None" Closed="Window_Closed">
     <Window.Resources>
         <ContextMenu x:Key="NotifierContextMenu" Placement="MousePoint">
             <MenuItem Header="Close" Click="CloseApp"/>
         </ContextMenu>
     </Window.Resources>
-    <materialDesign:DialogHost>
         <Grid>
             <Border BorderBrush="#FF673AB7" BorderThickness="1,1,1,1">
                 <Grid Height="50" VerticalAlignment="Top" MouseDown="DragMove">
                     <TextBlock></TextBlock>
+                    <materialDesign:PopupBox DockPanel.Dock="Left" PlacementMode="BottomAndAlignRightEdges" Margin="42,0,0,0" Padding="5,0,5,0">
+                        <ListBox>
+                            <ListBoxItem Content="Settings"/>
+                        <ListBoxItem Content="About" MouseLeftButtonUp="OpenAboutWindow"/>
+                            <ListBoxItem Content="Close" MouseLeftButtonUp="CloseApp"/>
+                        </ListBox>
+                    </materialDesign:PopupBox>
                     <materialDesign:PackIcon Kind="AccessAlarms" Width="35" Height="34" Margin="10,0,0,0" VerticalAlignment="Center" Name="Icon"/>
                     <TextBlock Text="CLOCK" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="22"
-                           Foreground="#FF673AB7" Margin="55,0,0,0" FontWeight="Bold" />
+                           Foreground="#FF673AB7" Margin="75,0,0,0" FontWeight="Bold" />
                     <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="196,0,0,0"
                         Click="MinimizeApp" ToolTip="Minimize">
                         <materialDesign:PackIcon Kind="WindowMinimize" Width="20" Height="20"/>
@@ -44,17 +50,21 @@
             </Border>
             <Grid Margin="0 50 0 0">
                 <dragablz:TabablzControl FixedHeaderCount="3">
-                    <TabItem Header="       ALARMS       ">
+                    <TabItem Header="ALARMS">
 
                     </TabItem>
-                    <TabItem Header="    STOPWATCH    ">
+                    <TabItem Header="STOPWATCH">
 
                     </TabItem>
-                    <TabItem Header="         TIMER         " IsSelected="True">
+                    <TabItem Header="TIMER" IsSelected="True">
                         <local:TimerView/>
                     </TabItem>
-                </dragablz:TabablzControl>
+                    <dragablz:TabablzControl.ItemContainerStyle>
+                        <Style TargetType="{x:Type dragablz:DragablzItem}" BasedOn="{StaticResource MaterialDesignDragableTabItemStyle}">
+                            <Setter Property="Width" Value="115" />
+                        </Style>
+                    </dragablz:TabablzControl.ItemContainerStyle>
+            </dragablz:TabablzControl>
             </Grid>
         </Grid>
-    </materialDesign:DialogHost>
 </Window>

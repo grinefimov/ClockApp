@@ -32,7 +32,10 @@ namespace ClockApp
         public static MediaPlayer Player { get; set; } = new MediaPlayer();
         public static Notifier Notifier { get; set; } = new Notifier(cfg =>
         {
-            cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(TimeSpan.FromDays(1), MaximumNotificationCount.FromCount(10));
+            cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+                TimeSpan.FromDays(365),
+                MaximumNotificationCount.FromCount(10)
+                );
             cfg.PositionProvider = new PrimaryScreenPositionProvider(Corner.BottomRight, 10, 10);
             cfg.DisplayOptions.Width = 325;
         });
@@ -43,7 +46,7 @@ namespace ClockApp
 
             InitializeComponent();
 
-            NotificationAreaIcon.Icon = new System.Drawing.Icon("alarm.ico"); // this.notifier.Icon = ForumProjects.Properties.Resources.A;
+            NotificationAreaIcon.Icon = new System.Drawing.Icon("alarm.ico");
             NotificationAreaIcon.Visible = false;
             NotificationAreaIcon.MouseClick += OpenWindow;
             NotificationAreaIcon.MouseDown += OpenNotifierContextMenu;
@@ -56,7 +59,7 @@ namespace ClockApp
         {
             if (e.Button == MouseButtons.Right)
             {
-                System.Windows.Controls.ContextMenu menu = (System.Windows.Controls.ContextMenu)this.FindResource("NotifierContextMenu");
+                var menu = (System.Windows.Controls.ContextMenu)this.FindResource("NotifierContextMenu");
                 menu.IsOpen = true;
             }
         }
@@ -97,6 +100,13 @@ namespace ClockApp
                 Icon.Focus();
                 NotificationAreaIcon.Visible = false;
             }
+        }
+
+        private void OpenAboutWindow(object sender, MouseButtonEventArgs e)
+        {
+            Window aboutWindow = new AboutWindow();
+            aboutWindow.Owner = this;
+            aboutWindow.Show();
         }
     }
 }

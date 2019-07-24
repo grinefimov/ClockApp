@@ -8,7 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="AboutWindow.xaml" />
     <None Remove="CustomDisplayPart.xaml" />
+    <None Remove="SettingsWindow.xaml" />
     <None Remove="TimerView.xaml" />
   </ItemGroup>
 
