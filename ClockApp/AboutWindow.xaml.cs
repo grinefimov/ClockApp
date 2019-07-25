@@ -25,7 +25,12 @@ namespace ClockApp
         private void CloseWindow(object sender, RoutedEventArgs e)
         {
             this.Close();
-            this.Owner.Focus();
+        }
+
+        private void DragMove(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                this.DragMove();
         }
     }
 }

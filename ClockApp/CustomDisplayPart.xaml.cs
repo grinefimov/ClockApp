@@ -27,8 +27,12 @@ namespace ClockApp
             Bind(customNotification);
 
             DispatcherTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(137) };
+            DispatcherTimer.Tick += (sender, args) =>
+            {
+                TurnOffButton.IsEnabled = false;
+                DispatcherTimer.Stop();
+            };
             DispatcherTimer.Start();
-            DispatcherTimer.Tick += (sender, args) => { TurnOffButton.IsEnabled = false; };
         }
 
         private void CloseNotification(object sender, RoutedEventArgs e)

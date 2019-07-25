@@ -13,17 +13,21 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Clock: About" Height="250" Width="250" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterOwner">
+        Title="ClockApp: About" Height="250" Width="300" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen">
     <Grid>
-        <Border BorderBrush="#FF673AB7" BorderThickness="1,1,1,1" Padding="20">
-            <Grid><Grid.RowDefinitions>
-                    <RowDefinition/>
+        <Border BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="1,1,1,1">
+            <Grid MouseDown="DragMove">
+                <Grid.RowDefinitions>
                     <RowDefinition Height="35"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="45"/>
                 </Grid.RowDefinitions>
-                <TextBlock TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock/><TextBlock Grid.Row="1"/><TextBlock Grid.Row="2"/>
+                <TextBlock Grid.Row="0" Text="About:" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                <TextBlock Grid.Row="1" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="30">
                     grinefimov
                 </TextBlock>
-                <Button Grid.Row="2" Content="OK" Width="50" Click="CloseWindow" VerticalAlignment="Bottom"/>
+                <Button Grid.Row="2" Content="OK" Width="50" Click="CloseWindow" VerticalAlignment="Bottom" Margin="0,0,0,10"/>
             </Grid>
         </Border>
     </Grid>

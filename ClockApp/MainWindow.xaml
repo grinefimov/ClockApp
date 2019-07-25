@@ -14,26 +14,27 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Clock" Height="347" Width="345" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None" Closed="Window_Closed">
+        Title="ClockApp" Height="347" Width="345" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None"
+        Closed="Window_Closed" Icon="Resources/alarm.ico">
     <Window.Resources>
         <ContextMenu x:Key="NotifierContextMenu" Placement="MousePoint">
             <MenuItem Header="Close" Click="CloseApp"/>
         </ContextMenu>
     </Window.Resources>
         <Grid>
-            <Border BorderBrush="#FF673AB7" BorderThickness="1,1,1,1">
+        <Border BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="1,1,1,1">
                 <Grid Height="50" VerticalAlignment="Top" MouseDown="DragMove">
                     <TextBlock></TextBlock>
                     <materialDesign:PopupBox DockPanel.Dock="Left" PlacementMode="BottomAndAlignRightEdges" Margin="42,0,0,0" Padding="5,0,5,0">
                         <ListBox>
-                            <ListBoxItem Content="Settings"/>
-                        <ListBoxItem Content="About" MouseLeftButtonUp="OpenAboutWindow"/>
+                            <ListBoxItem Content="Settings" MouseLeftButtonUp="OpenSettingsWindow"/>
+                            <ListBoxItem Content="About" MouseLeftButtonUp="OpenAboutWindow"/>
                             <ListBoxItem Content="Close" MouseLeftButtonUp="CloseApp"/>
                         </ListBox>
                     </materialDesign:PopupBox>
                     <materialDesign:PackIcon Kind="AccessAlarms" Width="35" Height="34" Margin="10,0,0,0" VerticalAlignment="Center" Name="Icon"/>
                     <TextBlock Text="CLOCK" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="22"
-                           Foreground="#FF673AB7" Margin="75,0,0,0" FontWeight="Bold" />
+                           Foreground="{DynamicResource PrimaryHueMidBrush}" Margin="75,0,0,0" FontWeight="Bold" />
                     <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="196,0,0,0"
                         Click="MinimizeApp" ToolTip="Minimize">
                         <materialDesign:PackIcon Kind="WindowMinimize" Width="20" Height="20"/>

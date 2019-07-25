@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using ClockApp.Annotations;
 using MaterialDesignThemes.Wpf;
 using ToastNotifications.Lifetime.Clear;
 
@@ -45,7 +47,7 @@ namespace ClockApp
                         StartPauseResumeButtonText = "Resume";
                         break;
                 }
-                OnPropertyChanged("StartPauseResumeButtonText");
+                OnPropertyChanged(nameof(StartPauseResumeButtonText));
             }
         }
 
@@ -59,7 +61,7 @@ namespace ClockApp
                 if (value)
                 {
                     MainWindow.Player.Stop();
-                    MainWindow.Player.Play();
+                    MainWindow.PlayAudio();
                     MainWindow.Notifier.ShowCustomMessage("Timer " + Number + ": Time is up!!!");
                 }
 
@@ -67,7 +69,7 @@ namespace ClockApp
                 {
                     MainWindow.Player.Stop();
                 }
-                OnPropertyChanged("IsAlarming");
+                OnPropertyChanged(nameof(IsAlarming));
             }
         }
 
@@ -79,7 +81,7 @@ namespace ClockApp
             set
             {
                 _isStartPauseResumeButtonEnabled = value;
-                OnPropertyChanged("IsStartPauseResumeButtonEnabled");
+                OnPropertyChanged(nameof(IsStartPauseResumeButtonEnabled));
             }
         }
         public bool IsResetButtonEnabled
@@ -88,7 +90,7 @@ namespace ClockApp
             set
             {
                 _isResetButtonEnabled = value;
-                OnPropertyChanged("IsResetButtonEnabled");
+                OnPropertyChanged(nameof(IsResetButtonEnabled));
             }
         }
         public int Number
@@ -97,7 +99,7 @@ namespace ClockApp
             set
             {
                 _number = value;
-                OnPropertyChanged("Number");
+                OnPropertyChanged(nameof(Number));
             }
         }
         public DateTime? SelectedTime
@@ -127,7 +129,7 @@ namespace ClockApp
                         }
                     }
                 }
-                OnPropertyChanged("SelectedTime");
+                OnPropertyChanged(nameof(SelectedTime));
             }
         }
 
@@ -286,9 +288,10 @@ namespace ClockApp
             Stopped,Started,Paused
         }
 
-        protected void OnPropertyChanged(string name)
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
     public class TimerViewModel

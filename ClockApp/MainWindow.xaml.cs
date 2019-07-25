@@ -1,20 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Media;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
+using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ToastNotifications;
 using ToastNotifications.Lifetime;
 using ToastNotifications.Position;
@@ -27,7 +17,7 @@ namespace ClockApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        private System.Windows.Forms.NotifyIcon NotificationAreaIcon { get; set; } = new System.Windows.Forms.NotifyIcon();
+        private NotifyIcon NotificationAreaIcon { get; set; } = new NotifyIcon();
 
         public static MediaPlayer Player { get; set; } = new MediaPlayer();
         public static Notifier Notifier { get; set; } = new Notifier(cfg =>
@@ -39,40 +29,43 @@ namespace ClockApp
             cfg.PositionProvider = new PrimaryScreenPositionProvider(Corner.BottomRight, 10, 10);
             cfg.DisplayOptions.Width = 325;
         });
+        public static SettingsModel Settings { get; set; }
 
         public MainWindow()
         {
-            this.Title = "Clock";
+            try
+            {
+                Settings = Serializer.ReadFromXmlFile<SettingsModel>(Environment.GetFolderPath(
+                                                                    Environment.SpecialFolder.LocalApplicationData) + "\\ClockApp\\settings");
+            }
+            catch (FileNotFoundException)
+            {
+                Settings = new SettingsModel();
+            }
+            catch (DirectoryNotFoundException)
+            {
+                Settings = new SettingsModel();
+                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\ClockApp");
+            }
 
             InitializeComponent();
 
-            NotificationAreaIcon.Icon = new System.Drawing.Icon("alarm.ico");
+            NotificationAreaIcon.Icon = new Icon(System.Windows.Application.GetResourceStream(
+                new Uri("pack://application:,,,/Resources/alarm.ico")).Stream);
             NotificationAreaIcon.Visible = false;
             NotificationAreaIcon.MouseClick += OpenWindow;
             NotificationAreaIcon.MouseDown += OpenNotifierContextMenu;
-
-            Player.Open(new Uri("audio.mp3", UriKind.Relative));
-            Player.Volume = 0.4;
         }
 
-        private void OpenNotifierContextMenu(object sender, MouseEventArgs e)
+        private void CloseApp(object sender, RoutedEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
-            {
-                var menu = (System.Windows.Controls.ContextMenu)this.FindResource("NotifierContextMenu");
-                menu.IsOpen = true;
-            }
+            System.Windows.Application.Current.Shutdown();
         }
 
         private void DragMove(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
                 this.DragMove();
-        }
-
-        private void CloseApp(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Application.Current.Shutdown();
         }
 
         private void MinimizeApp(object sender, RoutedEventArgs e)
@@ -97,16 +90,37 @@ namespace ClockApp
             {
                 this.Show();
                 this.WindowState = WindowState.Normal;
-                Icon.Focus();
+                Icon.Focus(); // To hide "To notification area" tooltip
                 NotificationAreaIcon.Visible = false;
             }
+        }
+
+        private void OpenNotifierContextMenu(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var menu = (System.Windows.Controls.ContextMenu)this.FindResource("NotifierContextMenu");
+                menu.IsOpen = true;
+            }
+        }
+
+        private void OpenSettingsWindow(object sender, MouseButtonEventArgs e)
+        {
+            Window settingsWindow = new SettingsWindow();
+            settingsWindow.Show();
         }
 
         private void OpenAboutWindow(object sender, MouseButtonEventArgs e)
         {
             Window aboutWindow = new AboutWindow();
-            aboutWindow.Owner = this;
             aboutWindow.Show();
+        }
+
+        public static void PlayAudio()
+        {
+            Player.Open(new Uri(Settings.AudioFilePath));
+            Player.Volume = Settings.AlarmVolume / 100;
+            Player.Play();
         }
     }
 }
