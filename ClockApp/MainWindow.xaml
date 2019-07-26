@@ -15,7 +15,7 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="ClockApp" Height="347" Width="345" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None"
-        Closed="Window_Closed" Icon="Resources/alarm.ico">
+        Closed="Window_Closed" Icon="Resources/alarm-colored.ico">
     <Window.Resources>
         <ContextMenu x:Key="NotifierContextMenu" Placement="MousePoint">
             <MenuItem Header="Close" Click="CloseApp"/>

@@ -51,7 +51,7 @@ namespace ClockApp
             InitializeComponent();
 
             NotificationAreaIcon.Icon = new Icon(System.Windows.Application.GetResourceStream(
-                new Uri("pack://application:,,,/Resources/alarm.ico")).Stream);
+                new Uri("pack://application:,,,/Resources/alarm-colored-bg.ico")).Stream);
             NotificationAreaIcon.Visible = false;
             NotificationAreaIcon.MouseClick += OpenWindow;
             NotificationAreaIcon.MouseDown += OpenNotifierContextMenu;

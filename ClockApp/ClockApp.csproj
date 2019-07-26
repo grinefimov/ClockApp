@@ -4,13 +4,14 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>alarm.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\alarm-colored-bg.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="AboutWindow.xaml" />
     <None Remove="CustomDisplayPart.xaml" />
-    <None Remove="Resources\alarm.ico" />
+    <None Remove="Resources\alarm-colored-bg.ico" />
+    <None Remove="Resources\alarm-colored.ico" />
     <None Remove="SettingsWindow.xaml" />
     <None Remove="TimerView.xaml" />
   </ItemGroup>
@@ -22,7 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\alarm.ico" />
+    <Resource Include="Resources\alarm-colored-bg.ico" />
+    <Resource Include="Resources\alarm-colored.ico" />
   </ItemGroup>
 
 </Project>
