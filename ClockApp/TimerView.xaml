@@ -24,7 +24,8 @@
                                     <TextBlock Text="{Binding Number}"/>
                                 </TextBlock>
                             <materialDesign:TimePicker Name="TimePicker" Is24Hours="True" WithSeconds="True" Width="98" FontSize="20" Margin="0,0,170,0"
-                                                       Foreground="White" SelectedTime="{Binding SelectedTime}" Initialized="TimePicker_Initialized"/>
+                                                       Foreground="White" SelectedTime="{Binding SelectedTime}" Initialized="TimePicker_Initialized"
+                                                       IsEnabled="{Binding IsTimePickerEnabled}"/>
                                 <Button IsEnabled="{Binding IsStartPauseResumeButtonEnabled}" Content="{Binding StartPauseResumeButtonText}" Width="80"
                                     Margin="20,0,0,0" Command="{Binding Path=StartPauseResumeCommand}" CommandParameter="{Binding}" FontSize="12"/>
                             <Button IsEnabled="{Binding IsResetButtonEnabled}" Content="Reset" Width="80" Margin="192,0,0,0"
@@ -37,7 +38,7 @@
                     </materialDesign:Card>
                     <DataTemplate.Triggers>
                         <DataTrigger Binding="{Binding IsAlarming}" Value="True">
-                            <Setter TargetName="TimePicker" Property="Foreground" Value="#FFE03658"/>
+                            <Setter TargetName="TimePicker" Property="Foreground" Value="#e91e63"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding IsAlarming}" Value="True">
                             <DataTrigger.EnterActions>
@@ -58,12 +59,3 @@
                    HorizontalAlignment="Center" Opacity="0.04"/>
     </Grid>
 </UserControl>
-
-<!--<Storyboard x:Key="AlarmAnimation">
-    <DoubleAnimation Storyboard.TargetName="Card" Storyboard.TargetProperty="Opacity"
-                     From="1.0" To="0.2" Duration="0:0:0.4" AutoReverse="True" RepeatBehavior="Forever" />
-</Storyboard>
-<Storyboard x:Key="StopAlarmAnimation">
-    <DoubleAnimation Storyboard.TargetName="Card" Storyboard.TargetProperty="Opacity"
-                     To="1.0" Duration="0:0:0.1" />
-</Storyboard>-->

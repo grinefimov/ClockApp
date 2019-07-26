@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -8,27 +8,30 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Xml.Serialization;
 using ClockApp.Annotations;
 using MaterialDesignThemes.Wpf;
 using ToastNotifications.Lifetime.Clear;
 
 namespace ClockApp
 {
+    class TimerViewModel
+    {
+        public static ObservableCollection<TimerModel> Timers { get; set; }
+    }
+
     public class TimerModel : INotifyPropertyChanged
     {
         private TimerStatus _status = TimerStatus.Stopped;
         private bool _isAlarming = false;
         private bool _isStartPauseResumeButtonEnabled = false;
         private bool _isResetButtonEnabled = false;
+        private bool _canSaveTime = true;
+        private bool _isTimePickerEnabled = true;
         private int _number;
-        private DateTime? _selectedTime = DateTime.MaxValue; // To change it in TimePicker_Initialized(object sender, EventArgs e),
-        // so SelectedTimeChanged event raised and 0:00 changed to 0:00:00
-        private ICommand _startPauseResumeCommand;
-        private ICommand _resetCommand;
-        private ICommand _removeTimerCommand;
-        private DateTime Time { get; set; }
+        private DateTime? _selectedTime;
         private System.Windows.Threading.DispatcherTimer DispatcherTimer { get; set; } = new System.Windows.Threading.DispatcherTimer();
-        private bool IsBackward { get; set; } = false;
+        private bool _isBackward = false;
         private TimerStatus Status
         {
             get => _status;
@@ -38,10 +41,12 @@ namespace ClockApp
                 switch (value)
                 {
                     case TimerStatus.Stopped:
+                        if (!_isBackward) { IsTimePickerEnabled = true; }
                         StartPauseResumeButtonText = "Start";
                         break;
                     case TimerStatus.Started:
                         StartPauseResumeButtonText = "Pause";
+                        IsTimePickerEnabled = false;
                         break;
                     case TimerStatus.Paused:
                         StartPauseResumeButtonText = "Resume";
@@ -52,6 +57,7 @@ namespace ClockApp
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+        [XmlIgnore]
         public bool IsAlarming
         {
             get => _isAlarming;
@@ -72,9 +78,11 @@ namespace ClockApp
                 OnPropertyChanged(nameof(IsAlarming));
             }
         }
-
+        [XmlIgnore]
         public bool StopTimer { get; set; } = false;
+        [XmlIgnore]
         public string StartPauseResumeButtonText { get; set; } = "Start";
+        [XmlIgnore]
         public bool IsStartPauseResumeButtonEnabled
         {
             get => _isStartPauseResumeButtonEnabled;
@@ -84,6 +92,7 @@ namespace ClockApp
                 OnPropertyChanged(nameof(IsStartPauseResumeButtonEnabled));
             }
         }
+        [XmlIgnore]
         public bool IsResetButtonEnabled
         {
             get => _isResetButtonEnabled;
@@ -91,6 +100,16 @@ namespace ClockApp
             {
                 _isResetButtonEnabled = value;
                 OnPropertyChanged(nameof(IsResetButtonEnabled));
+            }
+        }
+        [XmlIgnore]
+        public bool IsTimePickerEnabled
+        {
+            get => _isTimePickerEnabled;
+            set
+            {
+                _isTimePickerEnabled = value;
+                OnPropertyChanged(nameof(IsTimePickerEnabled));
             }
         }
         public int Number
@@ -102,6 +121,8 @@ namespace ClockApp
                 OnPropertyChanged(nameof(Number));
             }
         }
+        public DateTime Time { get; set; }
+        [XmlIgnore]
         public DateTime? SelectedTime
         {
             get => _selectedTime;
@@ -112,19 +133,19 @@ namespace ClockApp
                 {
                     Status = TimerStatus.Stopped;
                 }
-                DateTime time = value.GetValueOrDefault(DateTime.MinValue);
+                if (_canSaveTime) { Time = value.GetValueOrDefault(); }
+                DateTime time = value.GetValueOrDefault();
                 if (time.Hour == 0 && time.Minute == 0 && time.Second == 0)
                 {
                     IsStartPauseResumeButtonEnabled = false;
                 }
                 else
                 {
-                    if (!IsBackward)
+                    if (!_isBackward)
                     {
                         IsStartPauseResumeButtonEnabled = true;
                         if (Status == TimerStatus.Stopped)
                         {
-
                             IsResetButtonEnabled = false;
                         }
                     }
@@ -133,13 +154,16 @@ namespace ClockApp
             }
         }
 
+        public TimerModel() { }
+
         public TimerModel(int number)
         {
             Number = number;
         }
 
         #region StartPauseResumeCommand
-        public ICommand StartPauseResumeCommand => _startPauseResumeCommand ??= new StartPauseResume();
+
+        public ICommand StartPauseResumeCommand { get; } = new StartPauseResume();
 
         private class StartPauseResume : ICommand
         {
@@ -152,6 +176,7 @@ namespace ClockApp
                     _timer = (TimerModel)parameter;
                     _timer.DispatcherTimer.Interval = new TimeSpan(0, 0, 1);
                 }
+                _timer._canSaveTime = false;
                 if (_timer.SelectedTime > DateTime.MinValue)
                 {
                     switch (_timer.Status)
@@ -159,7 +184,7 @@ namespace ClockApp
                         case TimerStatus.Stopped:
                             _timer.Status = TimerStatus.Started;
                             _timer.StopTimer = false;
-                            _timer.IsBackward = false;
+                            _timer._isBackward = false;
                             _timer.IsResetButtonEnabled = true;
                             _timer.Time = _timer.SelectedTime.GetValueOrDefault(DateTime.MinValue);
                             _timer.DispatcherTimer.Tick -= DispatcherTimer_Tick;
@@ -181,17 +206,17 @@ namespace ClockApp
 
             private void DispatcherTimer_Tick(object sender, EventArgs e)
             {
-                DateTime time = _timer.SelectedTime.GetValueOrDefault(DateTime.MinValue);
+                DateTime time = _timer.SelectedTime.GetValueOrDefault();
                 if (_timer.StopTimer)
                 {
                     _timer.StopTimer = false;
                     _timer.Status = TimerStatus.Stopped;
                     _timer.DispatcherTimer.Stop();
                 }
-                else if (time.Hour == 0 && time.Minute == 0 && time.Second == 1 && !_timer.IsBackward)
+                else if (time.Hour == 0 && time.Minute == 0 && time.Second == 1 && !_timer._isBackward)
                 {
-                    _timer.IsBackward = true;
-                    _timer.SelectedTime = DateTime.MinValue;
+                    _timer._isBackward = true;
+                    _timer.SelectedTime = new DateTime();
                     _timer.Status = TimerStatus.Stopped;
                     _timer.IsStartPauseResumeButtonEnabled = false;
                     _timer.IsResetButtonEnabled = true;
@@ -199,7 +224,7 @@ namespace ClockApp
                 }
                 else
                 {
-                    _timer.SelectedTime = _timer.IsBackward ? time.AddSeconds(1) : time.AddSeconds(-1);
+                    _timer.SelectedTime = _timer._isBackward ? time.AddSeconds(1) : time.AddSeconds(-1);
                 }
             }
         }
@@ -207,7 +232,7 @@ namespace ClockApp
         #endregion
 
         #region ResetCommand
-        public ICommand ResetCommand => _resetCommand ??= new Reset();
+        public ICommand ResetCommand { get; } = new Reset();
 
         private class Reset : ICommand
         {
@@ -225,8 +250,10 @@ namespace ClockApp
                         _timer.DispatcherTimer.Stop();
                         _timer.SelectedTime = _timer.Time;
                         _timer.IsAlarming = false;
+                        if (_timer._isBackward) { _timer._isBackward = false; }
                         _timer.IsStartPauseResumeButtonEnabled = true;
                         _timer.IsResetButtonEnabled = false;
+                        _timer.IsTimePickerEnabled = true;
                         MainWindow.Notifier.ClearMessages(new ClearByMessage("Timer " + _timer.Number + ": Time is up!!!"));
                         break;
                     case TimerStatus.Started:
@@ -243,13 +270,14 @@ namespace ClockApp
                         _timer.IsResetButtonEnabled = false;
                         break;
                 }
+                _timer._canSaveTime = true;
             }
             public event EventHandler CanExecuteChanged;
         }
         #endregion
 
         #region RemoveTimerCommand
-        public ICommand RemoveTimerCommand => _removeTimerCommand ??= new RemoveTimer();
+        public ICommand RemoveTimerCommand { get; } = new RemoveTimer();
 
         private class RemoveTimer : ICommand
         {
@@ -283,7 +311,7 @@ namespace ClockApp
         }
         #endregion
 
-        enum TimerStatus
+        private enum TimerStatus
         {
             Stopped,Started,Paused
         }
@@ -294,12 +322,4 @@ namespace ClockApp
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-    public class TimerViewModel
-    {
-        public static ObservableCollection<TimerModel> Timers { get; } = new ObservableCollection<TimerModel>
-        {
-            new TimerModel(1)
-        };
-    }
-
-    }
+}

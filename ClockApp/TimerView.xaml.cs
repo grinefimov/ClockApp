@@ -1,17 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MaterialDesignThemes.Wpf;
 
 namespace ClockApp
 {
@@ -21,7 +10,6 @@ namespace ClockApp
     public partial class TimerView : UserControl
     {
         public static TimerView Instance { get; set; }
-
         public TimerView()
         {
             Instance = this;
@@ -31,7 +19,21 @@ namespace ClockApp
         private void TimePicker_Initialized(object sender, EventArgs e)
         {
             MaterialDesignThemes.Wpf.TimePicker timePicker = (MaterialDesignThemes.Wpf.TimePicker)sender;
-            timePicker.SelectedTime = DateTime.MinValue;
+            if (timePicker.SelectedTime == null)
+            {
+                timePicker.SelectedTime = DateTime.MinValue;
+            }
+            else if(timePicker.SelectedTime == DateTime.MinValue)
+            {
+                timePicker.SelectedTime = DateTime.MaxValue;
+                timePicker.SelectedTime = DateTime.MinValue;
+            }
+            else
+            {
+                var temp = timePicker.SelectedTime;
+                timePicker.SelectedTime = DateTime.MinValue;
+                timePicker.SelectedTime = temp;
+            }
         }
         private void AddTimer(object sender, RoutedEventArgs e)
         {
