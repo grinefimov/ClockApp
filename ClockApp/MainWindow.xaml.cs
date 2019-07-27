@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
@@ -30,6 +29,10 @@ namespace ClockApp
             cfg.DisplayOptions.Width = 325;
         });
         public static SettingsModel Settings { get; set; }
+        public static SetupModel Setup { get; private set; } = new SetupModel()
+        {
+            Timers = new ObservableCollection<TimerModel> { new TimerModel(1) }
+        };
 
         public MainWindow()
         {
@@ -50,17 +53,15 @@ namespace ClockApp
 
             try
             {
-                TimerViewModel.Timers = Serializer.ReadFromXmlFile<ObservableCollection<TimerModel>>(
+                Setup = Serializer.ReadFromXmlFile<SetupModel> (
                     Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\ClockApp\\setup");
-                foreach (var t in TimerViewModel.Timers) { t.SelectedTime = t.Time; }
+                foreach (var t in Setup.Timers) { t.SelectedTime = t.Time; }
             }
             catch (FileNotFoundException)
             {
-                TimerViewModel.Timers = new ObservableCollection<TimerModel> { new TimerModel(1) };
             }
             catch (DirectoryNotFoundException)
             {
-                TimerViewModel.Timers = new ObservableCollection<TimerModel> { new TimerModel(1) };
                 Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\ClockApp");
             }
 
@@ -76,7 +77,7 @@ namespace ClockApp
         private void CloseApp(object sender, RoutedEventArgs e)
         {
             Serializer.WriteToXmlFile(Environment.GetFolderPath(
-                                          Environment.SpecialFolder.LocalApplicationData) + "\\ClockApp\\setup", TimerViewModel.Timers);
+                                          Environment.SpecialFolder.LocalApplicationData) + "\\ClockApp\\setup", Setup);
             System.Windows.Application.Current.Shutdown();
         }
 

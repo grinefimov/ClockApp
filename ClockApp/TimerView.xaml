@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ClockApp"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
+             FontFamily="{DynamicResource MaterialDesignFont}"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <Storyboard x:Key="AlarmAnimation">
@@ -19,13 +20,11 @@
                 <DataTemplate DataType="{x:Type local:TimerModel}">
                     <materialDesign:Card Name="Card" Height="50" Margin="0,1,0,0">
                         <Grid>
-                            <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}" VerticalAlignment="Center"
-                                           Margin="14,0,0,0" Foreground="White">
-                                    <TextBlock Text="{Binding Number}"/>
-                                </TextBlock>
-                            <materialDesign:TimePicker Name="TimePicker" Is24Hours="True" WithSeconds="True" Width="98" FontSize="20" Margin="0,0,170,0"
-                                                       Foreground="White" SelectedTime="{Binding SelectedTime}" Initialized="TimePicker_Initialized"
-                                                       IsEnabled="{Binding IsTimePickerEnabled}"/>
+                            <TextBlock Text="{Binding Number}" VerticalAlignment="Center" Margin="10,0,0,0"
+                                       Foreground="{DynamicResource MaterialDesignBody}"/>
+                            <materialDesign:TimePicker Name="TimePicker" Is24Hours="True" WithSeconds="True" Width="107" FontSize="22"
+                                                       Margin="0,0,180,0" Foreground="White" SelectedTime="{Binding SelectedTime}"
+                                                       Initialized="TimePicker_Initialized" IsEnabled="{Binding IsTimePickerEnabled}"/>
                                 <Button IsEnabled="{Binding IsStartPauseResumeButtonEnabled}" Content="{Binding StartPauseResumeButtonText}" Width="80"
                                     Margin="20,0,0,0" Command="{Binding Path=StartPauseResumeCommand}" CommandParameter="{Binding}" FontSize="12"/>
                             <Button IsEnabled="{Binding IsResetButtonEnabled}" Content="Reset" Width="80" Margin="192,0,0,0"

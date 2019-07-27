@@ -14,7 +14,7 @@ namespace ClockApp
         {
             Instance = this;
             InitializeComponent();
-            ItemsControl.ItemsSource = TimerViewModel.Timers;
+            ItemsControl.ItemsSource = MainWindow.Setup.Timers;
         }
         private void TimePicker_Initialized(object sender, EventArgs e)
         {
@@ -37,8 +37,8 @@ namespace ClockApp
         }
         private void AddTimer(object sender, RoutedEventArgs e)
         {
-            TimerViewModel.Timers.Add(new TimerModel(TimerViewModel.Timers.Count + 1));
-            if (TimerViewModel.Timers.Count > 4)
+            MainWindow.Setup.Timers.Add(new TimerModel(MainWindow.Setup.Timers.Count + 1));
+            if (MainWindow.Setup.Timers.Count > 4)
             {
                 AddTimerButton.Visibility = Visibility.Hidden;
             }

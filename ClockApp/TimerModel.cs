@@ -1,25 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using System.Xml.Serialization;
 using ClockApp.Annotations;
-using MaterialDesignThemes.Wpf;
 using ToastNotifications.Lifetime.Clear;
 
 namespace ClockApp
 {
-    class TimerViewModel
-    {
-        public static ObservableCollection<TimerModel> Timers { get; set; }
-    }
-
     public class TimerModel : INotifyPropertyChanged
     {
         private TimerStatus _status = TimerStatus.Stopped;
@@ -176,13 +164,13 @@ namespace ClockApp
                     _timer = (TimerModel)parameter;
                     _timer.DispatcherTimer.Interval = new TimeSpan(0, 0, 1);
                 }
-                _timer._canSaveTime = false;
                 if (_timer.SelectedTime > DateTime.MinValue)
                 {
                     switch (_timer.Status)
                     {
                         case TimerStatus.Stopped:
                             _timer.Status = TimerStatus.Started;
+                            _timer._canSaveTime = false;
                             _timer.StopTimer = false;
                             _timer._isBackward = false;
                             _timer.IsResetButtonEnabled = true;
@@ -294,15 +282,15 @@ namespace ClockApp
                     _timer.IsAlarming = false;
                     MainWindow.Notifier.ClearMessages(new ClearByMessage("Timer " + _timer.Number + ": Time is up!!!"));
                 }
-                TimerViewModel.Timers.RemoveAt(_timer.Number - 1);
+                MainWindow.Setup.Timers.RemoveAt(_timer.Number - 1);
                 _timer.DispatcherTimer.Stop();
                 int number = 1;
-                foreach (var t in TimerViewModel.Timers)
+                foreach (var t in MainWindow.Setup.Timers)
                 {
                     t.Number = number;
                     number++;
                 }
-                if (TimerViewModel.Timers.Count < 5)
+                if (MainWindow.Setup.Timers.Count < 5)
                 {
                     TimerView.Instance.ShowAddTimerButton();
                 }
@@ -313,7 +301,7 @@ namespace ClockApp
 
         private enum TimerStatus
         {
-            Stopped,Started,Paused
+            Stopped, Started, Paused
         }
 
         [NotifyPropertyChangedInvocator]
