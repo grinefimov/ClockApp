@@ -10,62 +10,69 @@
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
-        TextOptions.TextFormattingMode="Ideal" 
-        TextOptions.TextRenderingMode="Auto"        
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="ClockApp" Height="352" Width="345" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None"
+        Title="ClockApp" Height="352" Width="345" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
         Closed="Window_Closed" Icon="Resources/alarm-colored.ico">
     <Window.Resources>
         <ContextMenu x:Key="NotifierContextMenu" Placement="MousePoint">
-            <MenuItem Header="Close" Click="CloseApp"/>
+            <MenuItem Header="Close" Click="CloseApp" />
         </ContextMenu>
     </Window.Resources>
-        <Grid>
+    <Grid>
         <Border BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="1,1,1,1">
-                <Grid Height="50" VerticalAlignment="Top" MouseDown="DragMove">
-                    <TextBlock></TextBlock>
-                    <materialDesign:PopupBox DockPanel.Dock="Left" PlacementMode="BottomAndAlignRightEdges" Margin="42,0,0,0" Padding="5,0,5,0">
-                        <ListBox>
-                            <ListBoxItem Content="Settings" MouseLeftButtonUp="OpenSettingsWindow"/>
-                            <ListBoxItem Content="About" MouseLeftButtonUp="OpenAboutWindow"/>
-                            <ListBoxItem Content="Close" MouseLeftButtonUp="CloseApp"/>
-                        </ListBox>
-                    </materialDesign:PopupBox>
-                    <materialDesign:PackIcon Kind="AccessAlarms" Width="35" Height="34" Margin="10,0,0,0" VerticalAlignment="Center" Name="Icon"/>
-                    <TextBlock Text="CLOCK" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="22"
+            <Grid Height="50" VerticalAlignment="Top" MouseDown="DragMove">
+                <TextBlock></TextBlock>
+                <materialDesign:PopupBox DockPanel.Dock="Left" PlacementMode="BottomAndAlignRightEdges"
+                                         Margin="42,0,0,0" Padding="5,0,5,0">
+                    <ListBox>
+                        <ListBoxItem Content="Settings" MouseLeftButtonUp="OpenSettingsWindow" />
+                        <ListBoxItem Content="About" MouseLeftButtonUp="OpenAboutWindow" />
+                        <ListBoxItem Content="Close" MouseLeftButtonUp="CloseApp" />
+                    </ListBox>
+                </materialDesign:PopupBox>
+                <materialDesign:PackIcon Kind="AccessAlarms" Width="35" Height="34" Margin="10,0,0,0"
+                                         VerticalAlignment="Center" Name="Icon" />
+                <TextBlock Text="CLOCK" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="22"
                            Foreground="{DynamicResource PrimaryHueMidBrush}" Margin="75,0,0,0" FontWeight="Bold" />
-                    <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="196,0,0,0"
+                <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}"
+                        BorderBrush="{x:Null}" Margin="196,0,0,0"
                         Click="MinimizeApp" ToolTip="Minimize">
-                        <materialDesign:PackIcon Kind="WindowMinimize" Width="20" Height="20"/>
-                    </Button>
-                    <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="245,0,0,0"
+                    <materialDesign:PackIcon Kind="WindowMinimize" Width="20" Height="20" />
+                </Button>
+                <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}"
+                        BorderBrush="{x:Null}" Margin="245,0,0,0"
                         Click="HideWindow" ToolTip="To notification area">
-                        <materialDesign:PackIcon Kind="MinusBoxOutline" Width="20" Height="20"/>
-                    </Button>
-                    <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="294,0,0,0"
+                    <materialDesign:PackIcon Kind="MinusBoxOutline" Width="20" Height="20" />
+                </Button>
+                <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}"
+                        BorderBrush="{x:Null}" Margin="294,0,0,0"
                         Click="CloseApp" ToolTip="Close">
-                        <materialDesign:PackIcon Kind="WindowClose" Width="20" Height="20"/>
-                    </Button>
-                </Grid>
-            </Border>
-            <Grid Margin="0 50 0 0">
-                <dragablz:TabablzControl FixedHeaderCount="3">
-                    <TabItem Header="ALARMS" Name="AlarmsTab">
-                        <local:AlarmsView/>
-                    </TabItem>
-                    <TabItem Header="TIMER" Name="TimerTab">
-                        <local:TimerView/>
-                    </TabItem>
-                    <TabItem Header="STOPWATCH" Name="StopwatchTab">
-
-                    </TabItem>
-                <dragablz:TabablzControl.ItemContainerStyle>
-                        <Style TargetType="{x:Type dragablz:DragablzItem}" BasedOn="{StaticResource MaterialDesignDragableTabItemStyle}">
-                            <Setter Property="Width" Value="115" />
-                        </Style>
-                    </dragablz:TabablzControl.ItemContainerStyle>
-            </dragablz:TabablzControl>
+                    <materialDesign:PackIcon Kind="WindowClose" Width="20" Height="20" />
+                </Button>
             </Grid>
+        </Border>
+        <Grid Margin="0 50 0 0">
+            <dragablz:TabablzControl FixedHeaderCount="3">
+                <TabItem Header="ALARMS" Name="AlarmsTab">
+                    <local:AlarmsView />
+                </TabItem>
+                <TabItem Header="TIMER" Name="TimerTab">
+                    <local:TimerView />
+                </TabItem>
+                <TabItem Header="STOPWATCH" Name="StopwatchTab">
+
+                </TabItem>
+                <dragablz:TabablzControl.ItemContainerStyle>
+                    <Style TargetType="{x:Type dragablz:DragablzItem}"
+                           BasedOn="{StaticResource MaterialDesignDragableTabItemStyle}">
+                        <Setter Property="Width" Value="115" />
+                    </Style>
+                </dragablz:TabablzControl.ItemContainerStyle>
+            </dragablz:TabablzControl>
         </Grid>
+    </Grid>
 </Window>

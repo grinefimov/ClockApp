@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Xml.Serialization;
+using ClockApp.Models;
 using ToastNotifications;
 using ToastNotifications.Lifetime;
 using ToastNotifications.Position;
@@ -20,29 +21,35 @@ namespace ClockApp
         private NotifyIcon NotificationAreaIcon { get; set; } = new NotifyIcon();
 
         public static MediaPlayer Player { get; set; } = new MediaPlayer();
+
         public static Notifier Notifier { get; set; } = new Notifier(cfg =>
         {
             cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
                 TimeSpan.FromDays(365),
                 MaximumNotificationCount.FromCount(10)
-                );
+            );
             cfg.PositionProvider = new PrimaryScreenPositionProvider(Corner.BottomRight, 10, 10);
             cfg.DisplayOptions.Width = 325;
         });
+
         public static SettingsModel Settings { get; set; }
+
         public static SetupModel Setup { get; private set; } = new SetupModel()
         {
-            Timers = new ObservableCollection<TimerModel> { new TimerModel(1) },
-            Alarms = new ObservableCollection<AlarmModel> { new AlarmModel(1) }
+            Timers = new ObservableCollection<TimerModel> {new TimerModel(1)},
+            Alarms = new ObservableCollection<AlarmModel> {new AlarmModel(1)}
         };
 
         public MainWindow()
         {
             #region Loading Settings
+
             try
             {
                 Settings = Serializer.ReadFromXmlFile<SettingsModel>(Environment.GetFolderPath(
-                                                                    Environment.SpecialFolder.LocalApplicationData) + "\\ClockApp\\settings");
+                                                                         Environment.SpecialFolder
+                                                                             .LocalApplicationData) +
+                                                                     "\\ClockApp\\settings");
             }
             catch (FileNotFoundException)
             {
@@ -51,16 +58,23 @@ namespace ClockApp
             catch (DirectoryNotFoundException)
             {
                 Settings = new SettingsModel();
-                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\ClockApp");
+                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) +
+                                          "\\ClockApp");
             }
+
             #endregion
 
             #region Loading Setup
+
             try
             {
-                Setup = Serializer.ReadFromXmlFile<SetupModel> (
+                Setup = Serializer.ReadFromXmlFile<SetupModel>(
                     Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\ClockApp\\setup");
-                foreach (var t in Setup.Timers) { t.SelectedTime = t.Time; }
+                foreach (var t in Setup.Timers)
+                {
+                    t.SelectedTime = t.Time;
+                }
+
                 _foundSetup = true;
             }
             catch (FileNotFoundException)
@@ -68,8 +82,10 @@ namespace ClockApp
             }
             catch (DirectoryNotFoundException)
             {
-                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\ClockApp");
+                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) +
+                                          "\\ClockApp");
             }
+
             #endregion
 
             InitializeComponent();
@@ -144,7 +160,7 @@ namespace ClockApp
         {
             if (e.Button == MouseButtons.Right)
             {
-                var menu = (System.Windows.Controls.ContextMenu)this.FindResource("NotifierContextMenu");
+                var menu = (System.Windows.Controls.ContextMenu) this.FindResource("NotifierContextMenu");
                 menu.IsOpen = true;
             }
         }
@@ -210,7 +226,7 @@ namespace ClockApp
             {
                 var serializer = new XmlSerializer(typeof(T));
                 reader = new StreamReader(filePath);
-                return (T)serializer.Deserialize(reader);
+                return (T) serializer.Deserialize(reader);
             }
             finally
             {

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.ComponentModel;
 using System.IO;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
-using ClockApp.Annotations;
 
 namespace ClockApp
 {
@@ -25,6 +22,7 @@ namespace ClockApp
         {
             this.Close();
         }
+
         private void DragMove(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
@@ -34,16 +32,17 @@ namespace ClockApp
         private void SaveSettings(object sender, RoutedEventArgs e)
         {
             Serializer.WriteToXmlFile(Environment.GetFolderPath(
-                                          Environment.SpecialFolder.LocalApplicationData) + "\\ClockApp\\settings", MainWindow.Settings);
+                                          Environment.SpecialFolder.LocalApplicationData) + "\\ClockApp\\settings",
+                MainWindow.Settings);
             this.Close();
         }
 
         private void SetDefaultSettings(object sender, RoutedEventArgs e)
         {
             MainWindow.Settings.AlarmVolume = 50;
-            MainWindow.Settings.AudioFilePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\alarm.mp3";
+            MainWindow.Settings.AudioFilePath =
+                Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\alarm.mp3";
             MainWindow.Settings.AudioName = "alarm.mp3";
-
         }
 
         private void OpenAudioFile(object sender, RoutedEventArgs e)

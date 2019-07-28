@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 using ToastNotifications;
 using ToastNotifications.Core;
 
-namespace ClockApp
+namespace ClockApp.Models
 {
     public class ClockNotification : NotificationBase, INotifyPropertyChanged
     {
         private NotificationDisplayPart _displayPart;
         private string _message;
 
-        public override ToastNotifications.Core.NotificationDisplayPart DisplayPart => _displayPart ??= new NotificationDisplayPart(this);
+        public override ToastNotifications.Core.NotificationDisplayPart DisplayPart =>
+            _displayPart ??= new NotificationDisplayPart(this);
+
         public TimerModel Timer { get; }
 
         public new string Message

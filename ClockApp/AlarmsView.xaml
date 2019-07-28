@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:ClockApp"
              mc:Ignorable="d"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:models="clr-namespace:ClockApp.Models"
              TextElement.Foreground="{DynamicResource MaterialDesignBody}"
              d:DesignHeight="300" d:DesignWidth="345">
     <UserControl.Resources>
@@ -17,39 +18,46 @@
     <Grid>
         <ItemsControl Name="ItemsControl">
             <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="{x:Type local:AlarmModel}">
+                <DataTemplate DataType="{x:Type models:AlarmModel}">
                     <materialDesign:Card Name="Card" Height="85" Margin="0,1,0,0">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50"/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
+                                <RowDefinition />
+                                <RowDefinition />
                             </Grid.RowDefinitions>
                             <ToggleButton IsChecked="{Binding IsOn}" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
-                                          Style="{StaticResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                                          Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                          HorizontalAlignment="Left" Margin="10,0,0,0" />
                             <Grid Column="1" Row="0">
-                                <TextBox Name="Title" Text="{Binding Title}" materialDesign:HintAssist.Hint="Alarm 1" VerticalAlignment="Center"
-                                         HorizontalAlignment="Left" Width="235" Margin="10,0,0,0" FontSize="16"/>
-                                <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" HorizontalAlignment="Right" Height="20" Width="20"
-                                        Margin="0,8,7,0" Command="{Binding Path=RemoveAlarmCommand}" CommandParameter="{Binding}">
-                                    <materialDesign:PackIcon Kind="Close" Height="15" Width="15"/>
+                                <TextBox Name="Title" Text="{Binding Title}" materialDesign:HintAssist.Hint="Alarm 1"
+                                         VerticalAlignment="Center"
+                                         HorizontalAlignment="Left" Width="235" Margin="10,0,0,0" FontSize="16" />
+                                <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                                        HorizontalAlignment="Right" Height="20" Width="20"
+                                        Margin="0,8,7,0" Command="{Binding Path=RemoveAlarmCommand}"
+                                        CommandParameter="{Binding}">
+                                    <materialDesign:PackIcon Kind="Close" Height="15" Width="15" />
                                 </Button>
                             </Grid>
                             <Grid Column="1" Row="1">
-                                <materialDesign:TimePicker Name="TimePicker" SelectedTime="{Binding SelectedTime}" Is24Hours="True"
-                                                           HorizontalAlignment="Left" Width="77" FontSize="22" Margin="10,-10,0,0"/>
-                                <CheckBox Content="Repeat" IsChecked="{Binding IsRepeat}" Style="{StaticResource MaterialDesignCheckBox}"
-                                          HorizontalAlignment="Left" Width="65" Margin="100,0,0,9"/>
+                                <materialDesign:TimePicker Name="TimePicker" SelectedTime="{Binding SelectedTime}"
+                                                           Is24Hours="True"
+                                                           HorizontalAlignment="Left" Width="77" FontSize="22"
+                                                           Margin="10,-10,0,0" />
+                                <CheckBox Content="Repeat" IsChecked="{Binding IsRepeat}"
+                                          Style="{StaticResource MaterialDesignCheckBox}"
+                                          HorizontalAlignment="Left" Width="65" Margin="100,0,0,9" />
                             </Grid>
                         </Grid>
                     </materialDesign:Card>
                     <DataTemplate.Triggers>
                         <DataTrigger Binding="{Binding IsAlarming}" Value="True">
-                            <Setter TargetName="TimePicker" Property="Foreground" Value="#e91e63"/>
-                            <Setter TargetName="Title" Property="Foreground" Value="#e91e63"/>
+                            <Setter TargetName="TimePicker" Property="Foreground" Value="#e91e63" />
+                            <Setter TargetName="Title" Property="Foreground" Value="#e91e63" />
                             <DataTrigger.EnterActions>
                                 <BeginStoryboard x:Name="BeginAnimation" Storyboard="{StaticResource AlarmAnimation}" />
                             </DataTrigger.EnterActions>
@@ -61,10 +69,11 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <Button Name="AddTimerButton" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Margin="290,205,0,0" Click="AddTimer" >
-            <materialDesign:PackIcon Kind="Add" Height="25" Width="25"/>
+        <Button Name="AddTimerButton" Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                Margin="290,205,0,0" Click="AddTimer">
+            <materialDesign:PackIcon Kind="Add" Height="25" Width="25" />
         </Button>
         <TextBlock Text="grinefimov" FontSize="10" Panel.ZIndex="-1" Margin="0,0,0,4" VerticalAlignment="Bottom"
-                   HorizontalAlignment="Center" Opacity="0.04"/>
+                   HorizontalAlignment="Center" Opacity="0.04" />
     </Grid>
 </UserControl>

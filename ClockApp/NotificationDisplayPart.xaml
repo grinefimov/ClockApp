@@ -6,25 +6,29 @@
                               xmlns:local="clr-namespace:ClockApp"
                               xmlns:core="clr-namespace:ToastNotifications.Core;assembly=ToastNotifications"
                               xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                              xmlns:models="clr-namespace:ClockApp.Models"
                               mc:Ignorable="d"
                               Background="{DynamicResource MaterialDesignPaper}"
                               TextElement.Foreground="{DynamicResource MaterialDesignBody}"
                               d:DesignHeight="100" d:DesignWidth="325"
-                              d:DataContext="{d:DesignInstance local:ClockNotification, IsDesignTimeCreatable=False}"
+                              d:DataContext="{d:DesignInstance models:ClockNotification, IsDesignTimeCreatable=False}"
                               Height="100">
     <Grid>
         <Border BorderBrush="#FF673AB7" BorderThickness="1,1,1,1" Padding="10">
             <Grid>
-                <TextBlock Text="{Binding Message}" FontWeight="Bold" Foreground="White" TextWrapping="NoWrap" FontSize="16" Margin="10,7,0,0"
-                           VerticalAlignment="Top" HorizontalAlignment="Left" Width="245"/>
-                <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" VerticalAlignment="Top" HorizontalAlignment="Right"
+                <TextBlock Text="{Binding Message}" FontWeight="Bold" Foreground="White" TextWrapping="NoWrap"
+                           FontSize="16" Margin="10,7,0,0"
+                           VerticalAlignment="Top" HorizontalAlignment="Left" Width="245" />
+                <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" VerticalAlignment="Top"
+                        HorizontalAlignment="Right"
                         Click="CloseNotification">
-                    <materialDesign:PackIcon Kind="Close" Height="25" Width="25"/>
+                    <materialDesign:PackIcon Kind="Close" Height="25" Width="25" />
                 </Button>
-                <Button Name="MuteButton" IsEnabled="{Binding Timer.IsMuteButtonEnabled}" Content="Mute" FontSize="12" Width="80" Margin="0,0,0,0"
-                        VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="MuteAlarmMusic"/>
+                <Button Name="MuteButton" IsEnabled="{Binding Timer.IsMuteButtonEnabled}" Content="Mute" FontSize="12"
+                        Width="80" Margin="0,0,0,0"
+                        VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="MuteAlarmMusic" />
                 <Button Name="ResetButton" Content="Reset" FontSize="12" Width="80" Margin="90,0,0,0"
-                        VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="ResetTimer"/>
+                        VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="ResetTimer" />
             </Grid>
         </Border>
     </Grid>

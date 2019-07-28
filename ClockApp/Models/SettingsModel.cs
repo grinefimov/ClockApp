@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
 using ClockApp.Annotations;
 
-namespace ClockApp
+namespace ClockApp.Models
 {
     [Serializable]
     public class SettingsModel : INotifyPropertyChanged
@@ -17,6 +15,7 @@ namespace ClockApp
         private string _audioName;
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         public double AlarmVolume
         {
             get => _alarmVolume;
@@ -26,6 +25,7 @@ namespace ClockApp
                 OnPropertyChanged(nameof(AlarmVolume));
             }
         }
+
         public string AudioFilePath
         {
             get => _audioFilePath;
@@ -35,6 +35,7 @@ namespace ClockApp
                 AudioName = Path.GetFileName(value);
             }
         }
+
         public string AudioName
         {
             get => _audioName;

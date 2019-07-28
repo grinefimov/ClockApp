@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using ClockApp.Models;
 
 namespace ClockApp
 {
@@ -11,20 +12,22 @@ namespace ClockApp
     {
         public const int MaxTimersNumber = 5;
         public static TimerView Instance { get; set; }
+
         public TimerView()
         {
             Instance = this;
             InitializeComponent();
             ItemsControl.ItemsSource = MainWindow.Setup.Timers;
         }
+
         private void TimePicker_Initialized(object sender, EventArgs e)
         {
-            MaterialDesignThemes.Wpf.TimePicker timePicker = (MaterialDesignThemes.Wpf.TimePicker)sender;
+            MaterialDesignThemes.Wpf.TimePicker timePicker = (MaterialDesignThemes.Wpf.TimePicker) sender;
             if (timePicker.SelectedTime == null)
             {
                 timePicker.SelectedTime = DateTime.MinValue;
             }
-            else if(timePicker.SelectedTime == DateTime.MinValue)
+            else if (timePicker.SelectedTime == DateTime.MinValue)
             {
                 timePicker.SelectedTime = DateTime.MaxValue;
                 timePicker.SelectedTime = DateTime.MinValue;
@@ -36,6 +39,7 @@ namespace ClockApp
                 timePicker.SelectedTime = temp;
             }
         }
+
         private void AddTimer(object sender, RoutedEventArgs e)
         {
             MainWindow.Setup.Timers.Add(new TimerModel(MainWindow.Setup.Timers.Count + 1));

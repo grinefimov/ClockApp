@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Threading;
-using ToastNotifications.Core;
+using ClockApp.Models;
 
 namespace ClockApp
 {
@@ -10,6 +9,7 @@ namespace ClockApp
     {
         private System.Windows.Threading.DispatcherTimer DispatcherTimer { get; set; }
         public ClockNotification ClockNotification { get; }
+
         public NotificationDisplayPart(ClockNotification clockNotification)
         {
             ClockNotification = clockNotification;
@@ -18,7 +18,7 @@ namespace ClockApp
 
             Bind(clockNotification);
 
-            DispatcherTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(137) };
+            DispatcherTimer = new DispatcherTimer {Interval = TimeSpan.FromSeconds(137)};
             DispatcherTimer.Tick += (sender, args) =>
             {
                 MuteButton.IsEnabled = false;
@@ -29,7 +29,7 @@ namespace ClockApp
 
         private void CloseNotification(object sender, RoutedEventArgs e)
         {
-            ((NotificationDisplayPart)this).Notification.Close();
+            ((NotificationDisplayPart) this).Notification.Close();
         }
 
         private void MuteAlarmMusic(object sender, RoutedEventArgs e)

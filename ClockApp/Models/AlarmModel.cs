@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 using ClockApp.Annotations;
 using ToastNotifications.Lifetime.Clear;
 
-namespace ClockApp
+namespace ClockApp.Models
 {
     public class AlarmModel : INotifyPropertyChanged
     {
@@ -14,7 +14,9 @@ namespace ClockApp
         private bool _isOn;
         private bool _isAlarming = false;
 
-        private readonly System.Windows.Threading.DispatcherTimer _dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+        private readonly System.Windows.Threading.DispatcherTimer _dispatcherTimer =
+            new System.Windows.Threading.DispatcherTimer();
+
         private DateTime? _selectedTime = DateTime.MinValue;
 
         public int Number
@@ -65,7 +67,11 @@ namespace ClockApp
         {
             DateTime time = DateTime.Today.AddHours(SelectedTime.GetValueOrDefault().Hour);
             time = time.AddMinutes(SelectedTime.GetValueOrDefault().Minute);
-            if (DateTime.Now > time) { time = time.AddDays(1.0); }
+            if (DateTime.Now > time)
+            {
+                time = time.AddDays(1.0);
+            }
+
             TimeSpan timeLeft = time - DateTime.Now;
             _dispatcherTimer.Interval = timeLeft;
         }
@@ -95,6 +101,7 @@ namespace ClockApp
                     {
                         IsOn = false;
                     }
+
                     MainWindow.Player.Stop();
                     MainWindow.PlayAudio();
                     //MainWindow.Notifier.ShowTimerMessage(this, Title);

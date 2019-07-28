@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using ClockApp.Models;
 
 namespace ClockApp
 {
@@ -10,6 +11,7 @@ namespace ClockApp
     {
         public const int MaxAlarmsNumber = 3;
         public static AlarmsView Instance { get; set; }
+
         public AlarmsView()
         {
             Instance = this;
