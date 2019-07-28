@@ -14,7 +14,7 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="ClockApp" Height="347" Width="345" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None"
+        Title="ClockApp" Height="352" Width="345" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None"
         Closed="Window_Closed" Icon="Resources/alarm-colored.ico">
     <Window.Resources>
         <ContextMenu x:Key="NotifierContextMenu" Placement="MousePoint">
@@ -51,16 +51,16 @@
             </Border>
             <Grid Margin="0 50 0 0">
                 <dragablz:TabablzControl FixedHeaderCount="3">
-                    <TabItem Header="ALARMS">
-
+                    <TabItem Header="ALARMS" Name="AlarmsTab">
+                        <local:AlarmsView/>
                     </TabItem>
-                    <TabItem Header="STOPWATCH">
-
-                    </TabItem>
-                    <TabItem Header="TIMER" IsSelected="True">
+                    <TabItem Header="TIMER" Name="TimerTab">
                         <local:TimerView/>
                     </TabItem>
-                    <dragablz:TabablzControl.ItemContainerStyle>
+                    <TabItem Header="STOPWATCH" Name="StopwatchTab">
+
+                    </TabItem>
+                <dragablz:TabablzControl.ItemContainerStyle>
                         <Style TargetType="{x:Type dragablz:DragablzItem}" BasedOn="{StaticResource MaterialDesignDragableTabItemStyle}">
                             <Setter Property="Width" Value="115" />
                         </Style>

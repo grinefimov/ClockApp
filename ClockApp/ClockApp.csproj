@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <None Remove="AboutWindow.xaml" />
-    <None Remove="CustomDisplayPart.xaml" />
+    <None Remove="NotificationDisplayPart.xaml" />
     <None Remove="Resources\alarm-colored-bg.ico" />
     <None Remove="Resources\alarm-colored.ico" />
     <None Remove="SettingsWindow.xaml" />

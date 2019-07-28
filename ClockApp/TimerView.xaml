@@ -4,10 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ClockApp"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
-             FontFamily="{DynamicResource MaterialDesignFont}"
-             d:DesignHeight="450" d:DesignWidth="800">
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             d:DesignHeight="300" d:DesignWidth="345">
     <UserControl.Resources>
         <Storyboard x:Key="AlarmAnimation">
             <DoubleAnimation Storyboard.TargetName="Card" Storyboard.TargetProperty="Opacity"
@@ -18,12 +18,11 @@
         <ItemsControl Name="ItemsControl">
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type local:TimerModel}">
-                    <materialDesign:Card Name="Card" Height="50" Margin="0,1,0,0">
+                    <materialDesign:Card Name="Card" Height="51" Margin="0,1,0,0">
                         <Grid>
-                            <TextBlock Text="{Binding Number}" VerticalAlignment="Center" Margin="10,0,0,0"
-                                       Foreground="{DynamicResource MaterialDesignBody}"/>
+                            <TextBlock Text="{Binding Number}" VerticalAlignment="Center" Margin="10,0,0,0"/>
                             <materialDesign:TimePicker Name="TimePicker" Is24Hours="True" WithSeconds="True" Width="107" FontSize="22"
-                                                       Margin="0,0,180,0" Foreground="White" SelectedTime="{Binding SelectedTime}"
+                                                       Margin="0,0,180,0" SelectedTime="{Binding SelectedTime}"
                                                        Initialized="TimePicker_Initialized" IsEnabled="{Binding IsTimePickerEnabled}"/>
                                 <Button IsEnabled="{Binding IsStartPauseResumeButtonEnabled}" Content="{Binding StartPauseResumeButtonText}" Width="80"
                                     Margin="20,0,0,0" Command="{Binding Path=StartPauseResumeCommand}" CommandParameter="{Binding}" FontSize="12"/>
@@ -38,8 +37,6 @@
                     <DataTemplate.Triggers>
                         <DataTrigger Binding="{Binding IsAlarming}" Value="True">
                             <Setter TargetName="TimePicker" Property="Foreground" Value="#e91e63"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding IsAlarming}" Value="True">
                             <DataTrigger.EnterActions>
                                 <BeginStoryboard x:Name="BeginAnimation" Storyboard="{StaticResource AlarmAnimation}" />
                             </DataTrigger.EnterActions>
@@ -51,10 +48,10 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <Button Name="AddTimerButton" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Margin="290,205,0,0" Click="AddTimer" >
+        <Button Name="AddTimerButton" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Margin="290,207,0,0" Click="AddTimer" >
             <materialDesign:PackIcon Kind="Add" Height="25" Width="25"/>
         </Button>
-        <TextBlock Text="grinefimov" FontSize="10" Foreground="White" Panel.ZIndex="-1" Margin="0,0,0,4" VerticalAlignment="Bottom"
+        <TextBlock Text="grinefimov" FontSize="10" Panel.ZIndex="-1" Margin="0,0,0,4" VerticalAlignment="Bottom"
                    HorizontalAlignment="Center" Opacity="0.04"/>
     </Grid>
 </UserControl>

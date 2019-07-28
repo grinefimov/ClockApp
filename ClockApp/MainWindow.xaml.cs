@@ -16,6 +16,7 @@ namespace ClockApp
 {
     public partial class MainWindow : Window
     {
+        private readonly bool _foundSetup = false;
         private NotifyIcon NotificationAreaIcon { get; set; } = new NotifyIcon();
 
         public static MediaPlayer Player { get; set; } = new MediaPlayer();
@@ -31,11 +32,13 @@ namespace ClockApp
         public static SettingsModel Settings { get; set; }
         public static SetupModel Setup { get; private set; } = new SetupModel()
         {
-            Timers = new ObservableCollection<TimerModel> { new TimerModel(1) }
+            Timers = new ObservableCollection<TimerModel> { new TimerModel(1) },
+            Alarms = new ObservableCollection<AlarmModel> { new AlarmModel(1) }
         };
 
         public MainWindow()
         {
+            #region Loading Settings
             try
             {
                 Settings = Serializer.ReadFromXmlFile<SettingsModel>(Environment.GetFolderPath(
@@ -50,12 +53,15 @@ namespace ClockApp
                 Settings = new SettingsModel();
                 Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\ClockApp");
             }
+            #endregion
 
+            #region Loading Setup
             try
             {
                 Setup = Serializer.ReadFromXmlFile<SetupModel> (
                     Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\ClockApp\\setup");
                 foreach (var t in Setup.Timers) { t.SelectedTime = t.Time; }
+                _foundSetup = true;
             }
             catch (FileNotFoundException)
             {
@@ -64,8 +70,25 @@ namespace ClockApp
             {
                 Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\ClockApp");
             }
+            #endregion
 
             InitializeComponent();
+
+            if (_foundSetup)
+            {
+                switch (Setup.SelectedTab)
+                {
+                    case SetupModel.ClockAppTabs.Alarms:
+                        AlarmsTab.IsSelected = true;
+                        break;
+                    case SetupModel.ClockAppTabs.Stopwatch:
+                        StopwatchTab.IsSelected = true;
+                        break;
+                    case SetupModel.ClockAppTabs.Timer:
+                        TimerTab.IsSelected = true;
+                        break;
+                }
+            }
 
             NotificationAreaIcon.Icon = new Icon(System.Windows.Application.GetResourceStream(
                 new Uri("pack://application:,,,/Resources/alarm-colored-bg.ico")).Stream);
@@ -76,6 +99,9 @@ namespace ClockApp
 
         private void CloseApp(object sender, RoutedEventArgs e)
         {
+            if (AlarmsTab.IsSelected) Setup.SelectedTab = SetupModel.ClockAppTabs.Alarms;
+            else if (StopwatchTab.IsSelected) Setup.SelectedTab = SetupModel.ClockAppTabs.Stopwatch;
+            else Setup.SelectedTab = SetupModel.ClockAppTabs.Timer;
             Serializer.WriteToXmlFile(Environment.GetFolderPath(
                                           Environment.SpecialFolder.LocalApplicationData) + "\\ClockApp\\setup", Setup);
             System.Windows.Application.Current.Shutdown();

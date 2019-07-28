@@ -9,6 +9,7 @@ namespace ClockApp
     /// </summary>
     public partial class TimerView : UserControl
     {
+        public const int MaxTimersNumber = 5;
         public static TimerView Instance { get; set; }
         public TimerView()
         {
@@ -30,7 +31,7 @@ namespace ClockApp
             }
             else
             {
-                var temp = timePicker.SelectedTime;
+                DateTime? temp = timePicker.SelectedTime;
                 timePicker.SelectedTime = DateTime.MinValue;
                 timePicker.SelectedTime = temp;
             }
@@ -38,7 +39,7 @@ namespace ClockApp
         private void AddTimer(object sender, RoutedEventArgs e)
         {
             MainWindow.Setup.Timers.Add(new TimerModel(MainWindow.Setup.Timers.Count + 1));
-            if (MainWindow.Setup.Timers.Count > 4)
+            if (MainWindow.Setup.Timers.Count > MaxTimersNumber - 1)
             {
                 AddTimerButton.Visibility = Visibility.Hidden;
             }

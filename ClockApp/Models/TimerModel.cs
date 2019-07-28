@@ -18,8 +18,10 @@ namespace ClockApp
         private bool _isTimePickerEnabled = true;
         private int _number;
         private DateTime? _selectedTime;
-        private System.Windows.Threading.DispatcherTimer DispatcherTimer { get; set; } = new System.Windows.Threading.DispatcherTimer();
+        private readonly System.Windows.Threading.DispatcherTimer _dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
         private bool _isBackward = false;
+        private bool _isMuteButtonEnabled = true;
+
         private TimerStatus Status
         {
             get => _status;
@@ -44,7 +46,6 @@ namespace ClockApp
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
         [XmlIgnore]
         public bool IsAlarming
         {
@@ -56,7 +57,7 @@ namespace ClockApp
                 {
                     MainWindow.Player.Stop();
                     MainWindow.PlayAudio();
-                    MainWindow.Notifier.ShowCustomMessage("Timer " + Number + ": Time is up!!!");
+                    MainWindow.Notifier.ShowNotification(this, "Timer " + Number + ": Time is up!!!");
                 }
 
                 if (!value)
@@ -142,6 +143,17 @@ namespace ClockApp
             }
         }
 
+        [XmlIgnore]
+        public bool IsMuteButtonEnabled
+        {
+            get => _isMuteButtonEnabled;
+            set
+            {
+                _isMuteButtonEnabled = value;
+                OnPropertyChanged(nameof(IsMuteButtonEnabled));
+            }
+        }
+
         public TimerModel() { }
 
         public TimerModel(int number)
@@ -150,7 +162,6 @@ namespace ClockApp
         }
 
         #region StartPauseResumeCommand
-
         public ICommand StartPauseResumeCommand { get; } = new StartPauseResume();
 
         private class StartPauseResume : ICommand
@@ -162,7 +173,7 @@ namespace ClockApp
                 if (_timer == null)
                 {
                     _timer = (TimerModel)parameter;
-                    _timer.DispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+                    _timer._dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
                 }
                 if (_timer.SelectedTime > DateTime.MinValue)
                 {
@@ -175,16 +186,16 @@ namespace ClockApp
                             _timer._isBackward = false;
                             _timer.IsResetButtonEnabled = true;
                             _timer.Time = _timer.SelectedTime.GetValueOrDefault(DateTime.MinValue);
-                            _timer.DispatcherTimer.Tick -= DispatcherTimer_Tick;
-                            _timer.DispatcherTimer.Tick += DispatcherTimer_Tick;
-                            _timer.DispatcherTimer.Start();
+                            _timer._dispatcherTimer.Tick -= DispatcherTimer_Tick;
+                            _timer._dispatcherTimer.Tick += DispatcherTimer_Tick;
+                            _timer._dispatcherTimer.Start();
                             break;
                         case TimerStatus.Started:
-                            _timer.DispatcherTimer.Tick -= DispatcherTimer_Tick;
+                            _timer._dispatcherTimer.Tick -= DispatcherTimer_Tick;
                             _timer.Status = TimerStatus.Paused;
                             break;
                         case TimerStatus.Paused:
-                            _timer.DispatcherTimer.Tick += DispatcherTimer_Tick;
+                            _timer._dispatcherTimer.Tick += DispatcherTimer_Tick;
                             _timer.Status = TimerStatus.Started;
                             break;
                     }
@@ -199,7 +210,7 @@ namespace ClockApp
                 {
                     _timer.StopTimer = false;
                     _timer.Status = TimerStatus.Stopped;
-                    _timer.DispatcherTimer.Stop();
+                    _timer._dispatcherTimer.Stop();
                 }
                 else if (time.Hour == 0 && time.Minute == 0 && time.Second == 1 && !_timer._isBackward)
                 {
@@ -235,7 +246,7 @@ namespace ClockApp
                 switch (_timer.Status)
                 {
                     case TimerStatus.Stopped:
-                        _timer.DispatcherTimer.Stop();
+                        _timer._dispatcherTimer.Stop();
                         _timer.SelectedTime = _timer.Time;
                         _timer.IsAlarming = false;
                         if (_timer._isBackward) { _timer._isBackward = false; }
@@ -243,6 +254,7 @@ namespace ClockApp
                         _timer.IsResetButtonEnabled = false;
                         _timer.IsTimePickerEnabled = true;
                         MainWindow.Notifier.ClearMessages(new ClearByMessage("Timer " + _timer.Number + ": Time is up!!!"));
+                        _timer.IsMuteButtonEnabled = true;
                         break;
                     case TimerStatus.Started:
                         _timer.StopTimer = true;
@@ -282,15 +294,15 @@ namespace ClockApp
                     _timer.IsAlarming = false;
                     MainWindow.Notifier.ClearMessages(new ClearByMessage("Timer " + _timer.Number + ": Time is up!!!"));
                 }
-                MainWindow.Setup.Timers.RemoveAt(_timer.Number - 1);
-                _timer.DispatcherTimer.Stop();
+                MainWindow.Setup.Timers.Remove(_timer);
+                _timer._dispatcherTimer.Stop();
                 int number = 1;
                 foreach (var t in MainWindow.Setup.Timers)
                 {
                     t.Number = number;
                     number++;
                 }
-                if (MainWindow.Setup.Timers.Count < 5)
+                if (MainWindow.Setup.Timers.Count < TimerView.MaxTimersNumber)
                 {
                     TimerView.Instance.ShowAddTimerButton();
                 }
@@ -299,15 +311,17 @@ namespace ClockApp
         }
         #endregion
 
-        private enum TimerStatus
-        {
-            Stopped, Started, Paused
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private enum TimerStatus
+        {
+            Stopped, Started, Paused
         }
     }
 }
