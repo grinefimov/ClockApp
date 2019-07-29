@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using System.Windows.Threading;
 using System.Xml.Serialization;
 using ClockApp.Annotations;
 using ToastNotifications.Lifetime.Clear;
@@ -13,9 +14,11 @@ namespace ClockApp.Models
         private int _number;
         private bool _isOn;
         private bool _isAlarming = false;
+        private bool _isSnoozing = false;
 
-        private readonly System.Windows.Threading.DispatcherTimer _dispatcherTimer =
-            new System.Windows.Threading.DispatcherTimer();
+        private readonly System.Windows.Threading.DispatcherTimer _dispatcherTimer = new DispatcherTimer();
+        private System.Windows.Threading.DispatcherTimer _snoozeTimer;
+
 
         private DateTime? _selectedTime = DateTime.MinValue;
 
@@ -79,7 +82,7 @@ namespace ClockApp.Models
         private void DispatcherTimerOnTick(object sender, EventArgs e)
         {
             IsAlarming = true;
-            _dispatcherTimer.Stop();
+            if (!IsRepeat) _dispatcherTimer.Stop();
         }
 
         public bool IsRepeat { get; set; } = true;
@@ -93,18 +96,27 @@ namespace ClockApp.Models
                 _isAlarming = value;
                 if (value)
                 {
-                    if (IsRepeat)
+                    if (!_isSnoozing)
                     {
-                        _dispatcherTimer.Interval = TimeSpan.FromDays(1);
+                        if (IsRepeat)
+                        {
+                            _dispatcherTimer.Interval = TimeSpan.FromDays(1);
+                        }
+                        else
+                        {
+                            IsOn = false;
+                        }
                     }
                     else
                     {
-                        IsOn = false;
+                        _isSnoozing = false;
+                        _snoozeTimer.Stop();
                     }
+
 
                     MainWindow.Player.Stop();
                     MainWindow.PlayAudio();
-                    //MainWindow.Notifier.ShowTimerMessage(this, Title);
+                    MainWindow.Notifier.ShowAlarmNotification(this, Title);
                 }
                 else
                 {
@@ -123,6 +135,23 @@ namespace ClockApp.Models
         {
             Number = number;
             Title = "Alarm " + number.ToString();
+        }
+
+        public void Snooze()
+        {
+            IsAlarming = false;
+            if (_snoozeTimer == null) _snoozeTimer = new DispatcherTimer();
+            _isSnoozing = true;
+            _snoozeTimer.Interval = TimeSpan.FromMinutes(MainWindow.Settings.SnoozeLength);
+            _snoozeTimer.Tick -= OnSnoozeTimerTick;
+            _snoozeTimer.Tick += OnSnoozeTimerTick;
+            _snoozeTimer.Start();
+        }
+
+        private void OnSnoozeTimerTick(object sender, EventArgs e)
+        {
+            IsAlarming = true;
+            _snoozeTimer.Stop();
         }
 
         #region RemoveTimerCommand

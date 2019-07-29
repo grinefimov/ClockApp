@@ -13,6 +13,7 @@ namespace ClockApp.Models
         private double _alarmVolume = 50;
         private string _audioFilePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\alarm.mp3";
         private string _audioName;
+        private int _snoozeLength = 10;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -43,6 +44,16 @@ namespace ClockApp.Models
             {
                 _audioName = value;
                 OnPropertyChanged(nameof(AudioName));
+            }
+        }
+
+        public int SnoozeLength
+        {
+            get => _snoozeLength;
+            set
+            {
+                _snoozeLength = value == 0 ? 1 : value;
+                OnPropertyChanged(nameof(SnoozeLength));
             }
         }
 

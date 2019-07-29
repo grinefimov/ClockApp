@@ -13,7 +13,7 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="ClockApp: Settings" Height="250" Width="300" ResizeMode="NoResize" WindowStyle="None"
+        Title="ClockApp: Settings" Height="300" Width="300" ResizeMode="NoResize" WindowStyle="None"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Border BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="1,1,1,1" Padding="0">
@@ -27,18 +27,48 @@
                     <TextBlock />
                     <TextBlock Text="Settings:" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,20,0,0" />
                 </Grid>
-                <Grid Grid.Row="1" Margin="20,0,20,0">
-                    <TextBlock Text="Alarm volume:" VerticalAlignment="Top" Margin="10" />
-                    <Slider Minimum="0" Maximum="100" Value="{Binding AlarmVolume}" TickFrequency="5"
-                            VerticalAlignment="Top"
-                            Style="{StaticResource MaterialDesignDiscreteSlider}" Width="250" />
-                    <TextBlock Text="Alarm sound:" VerticalAlignment="Top" HorizontalAlignment="Left"
-                               Margin="10,73,0,0" />
-                    <TextBlock Text="{Binding AudioName}" VerticalAlignment="Top" HorizontalAlignment="Left"
-                               Width="105" Margin="95,73,0,0" />
-                    <Button Content="{materialDesign:PackIcon FolderOpen}" ToolTip="Open" HorizontalAlignment="Right"
-                            VerticalAlignment="Top"
-                            Margin="0,65,0,0" Click="OpenAudioFile" />
+                <Grid Grid.Row="1" Margin="20,0,20,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <TextBlock Text="Alarm volume:" VerticalAlignment="Top" Margin="10,0,0,0" />
+                        <Slider Minimum="0" Maximum="100" Value="{Binding AlarmVolume}" TickFrequency="5"
+                                VerticalAlignment="Top"
+                                Style="{StaticResource MaterialDesignDiscreteSlider}" Width="250" />
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <TextBlock Text="Alarm sound:" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                   Margin="10,0,0,0" />
+                        <TextBlock Text="{Binding AudioName}" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                   Width="105" Margin="95,0,0,0" />
+                        <Button Content="{materialDesign:PackIcon FolderOpen}" ToolTip="Open"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Margin="0,0,0,0" Click="OpenAudioFile" />
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <TextBlock Text="Alarm sound:" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                   Margin="10,0,0,0" />
+                        <TextBox Name="SnoozeLengthTextBox"
+                                 Text="{Binding SnoozeLength, UpdateSourceTrigger=PropertyChanged}" Margin="90,0,0,0"
+                                 Width="21" FontSize="18" MaxLength="2" materialDesign:ValidationAssist.UsePopup="True"
+                                 VerticalAlignment="Center" HorizontalAlignment="Left" />
+                        <TextBlock Text="minutes" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                   Width="50" Margin="115,0,0,0">
+                            <!--<TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SnoozeLength}" Value="1">
+                                            <Setter Property="TextBlock.Text" Value="FUCK"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>-->
+                        </TextBlock>
+                    </Grid>
                 </Grid>
                 <Grid Grid.Row="2">
                     <Button Content="Default" Width="80" VerticalAlignment="Bottom" HorizontalAlignment="Left"

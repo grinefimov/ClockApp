@@ -1,4 +1,4 @@
-﻿<core:NotificationDisplayPart x:Class="ClockApp.NotificationDisplayPart"
+﻿<core:NotificationDisplayPart x:Class="ClockApp.AlarmNotificationDisplayPart"
                               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -11,7 +11,7 @@
                               Background="{DynamicResource MaterialDesignPaper}"
                               TextElement.Foreground="{DynamicResource MaterialDesignBody}"
                               d:DesignHeight="100" d:DesignWidth="325"
-                              d:DataContext="{d:DesignInstance models:ClockNotification, IsDesignTimeCreatable=False}"
+                              d:DataContext="{d:DesignInstance models:TimerNotification, IsDesignTimeCreatable=False}"
                               Height="100">
     <Grid>
         <Border BorderBrush="#FF673AB7" BorderThickness="1,1,1,1" Padding="10">
@@ -24,11 +24,10 @@
                         Click="CloseNotification">
                     <materialDesign:PackIcon Kind="Close" Height="25" Width="25" />
                 </Button>
-                <Button Name="MuteButton" IsEnabled="{Binding Timer.IsMuteButtonEnabled}" Content="Mute" FontSize="12"
-                        Width="80" Margin="0,0,0,0"
-                        VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="MuteAlarmMusic" />
-                <Button Name="ResetButton" Content="Reset" FontSize="12" Width="80" Margin="90,0,0,0"
-                        VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="ResetTimer" />
+                <Button Content="Snooze" FontSize="12" Width="80" Margin="0,0,0,0" VerticalAlignment="Bottom"
+                        HorizontalAlignment="Left" Click="Snooze" />
+                <Button Content="Dismiss" FontSize="12" Width="80" Margin="90,0,0,0" VerticalAlignment="Bottom"
+                        HorizontalAlignment="Left" Click="DismissAlarm" />
             </Grid>
         </Border>
     </Grid>

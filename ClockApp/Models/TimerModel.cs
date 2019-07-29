@@ -65,7 +65,7 @@ namespace ClockApp.Models
                 {
                     MainWindow.Player.Stop();
                     MainWindow.PlayAudio();
-                    MainWindow.Notifier.ShowNotification(this, "Timer " + Number + ": Time is up!!!");
+                    MainWindow.Notifier.ShowTimerNotification(this, "Timer " + Number + ": Time is up!!!");
                 }
 
                 if (!value)
