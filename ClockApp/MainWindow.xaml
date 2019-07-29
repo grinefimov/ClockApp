@@ -64,7 +64,7 @@
                     <local:TimerView />
                 </TabItem>
                 <TabItem Header="STOPWATCH" Name="StopwatchTab">
-
+                    <local:StopwatchView />
                 </TabItem>
                 <dragablz:TabablzControl.ItemContainerStyle>
                     <Style TargetType="{x:Type dragablz:DragablzItem}"

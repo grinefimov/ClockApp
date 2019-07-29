@@ -18,12 +18,11 @@ namespace ClockApp.Models
         private bool _isTimePickerEnabled = true;
         private int _number;
         private DateTime? _selectedTime;
-
-        private readonly System.Windows.Threading.DispatcherTimer _dispatcherTimer =
-            new System.Windows.Threading.DispatcherTimer();
-
         private bool _isBackward = false;
         private bool _isMuteButtonEnabled = true;
+
+        private readonly System.Windows.Threading.DispatcherTimer _dispatcherTimer =
+            new System.Windows.Threading.DispatcherTimer() {Interval = new TimeSpan(0, 0, 1)};
 
         private TimerStatus Status
         {
@@ -197,7 +196,6 @@ namespace ClockApp.Models
                 if (_timer == null)
                 {
                     _timer = (TimerModel) parameter;
-                    _timer._dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
                 }
 
                 if (_timer.SelectedTime > DateTime.MinValue)
