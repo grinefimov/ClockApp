@@ -11,38 +11,78 @@
              FontFamily="{DynamicResource MaterialDesignFont}"
              d:DesignHeight="300" d:DesignWidth="345">
     <Grid>
-        <materialDesign:Card Name="Card" Height="85" Margin="0,1,0,0">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition /><RowDefinition />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition /><ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
-                    <TextBlock Text="{Binding TotalTimeString}" FontSize="26" HorizontalAlignment="Right" Width="115"
-                               Margin="0,0,10,0" />
-                </Grid>
-                <Grid Grid.Row="0" Grid.Column="1" VerticalAlignment="Center">
-                    <TextBlock Text="{Binding LapTimeString}" FontSize="22" HorizontalAlignment="Left" Width="100"
-                               Margin="10,0,0,0" />
-                </Grid>
-                <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="86" /><RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <materialDesign:Card Height="85" Margin="0,1,0,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
-                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Width="80" Margin="0,0,0,10" FontSize="12"
-                            HorizontalAlignment="Right" Content="{Binding StartPauseResumeButtonText}"
-                            Click="StartPauseResume" />
-                    <Button Grid.Column="1" Content="Lap" IsEnabled="False" Width="80" Margin="0,0,0,10" FontSize="12"
-                            HorizontalAlignment="Center" />
-                    <Button Grid.Column="2" Content="Reset" IsEnabled="{Binding IsResetButtonEnabled}" Width="80"
-                            Margin="0,0,0,10"
-                            FontSize="12" HorizontalAlignment="Left" Click="Reset" />
+                    <Grid Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding LapTimeString}" FontSize="26" HorizontalAlignment="Right" Width="115"
+                                   Margin="0,0,10,0" />
+                    </Grid>
+                    <Grid Grid.Row="0" Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding TotalTimeString}" FontSize="22" HorizontalAlignment="Left"
+                                   Width="100"
+                                   Margin="20,0,0,0" />
+                    </Grid>
+                    <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Width="80" Margin="0,0,0,10" FontSize="12"
+                                HorizontalAlignment="Right" Content="{Binding StartPauseResumeButtonText}"
+                                Click="StartPauseResume" />
+                        <Button Grid.Column="1" Content="Lap" IsEnabled="{Binding IsLapButtonEnabled}" Width="80"
+                                Margin="0,0,0,10" FontSize="12"
+                                HorizontalAlignment="Center" Click="AddLap" />
+                        <Button Grid.Column="2" Content="Reset" IsEnabled="{Binding IsResetButtonEnabled}" Width="80"
+                                Margin="0,0,0,10"
+                                FontSize="12" HorizontalAlignment="Left" Click="Reset" />
+                    </Grid>
                 </Grid>
-            </Grid>
-        </materialDesign:Card>
+            </materialDesign:Card>
+        </Grid>
+        <Grid Grid.Row="1" Margin="0,1,0,0">
+            <ScrollViewer>
+                <ItemsControl Name="ItemsControl">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type models:StopwatchModel}">
+                            <materialDesign:Card Height="30" Margin="0,0,0,1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="0" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Number}" HorizontalAlignment="Left" Margin="15,0,0,0"
+                                                   VerticalAlignment="Center" />
+                                        <TextBlock Text="{Binding LapTimeString}" FontSize="24"
+                                                   HorizontalAlignment="Right" Margin="0,0,-10,0" />
+                                    </Grid>
+                                    <Grid Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding TotalTimeString}" FontSize="20"
+                                                   HorizontalAlignment="Left" Margin="40,0,0,0" />
+                                    </Grid>
+                                </Grid>
+                            </materialDesign:Card>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+        <TextBlock Grid.Row="1" Text="grinefimov" FontSize="10" Panel.ZIndex="-1" Margin="0,0,0,4"
+                   VerticalAlignment="Bottom"
+                   HorizontalAlignment="Center" Opacity="0.04" />
     </Grid>
 </UserControl>

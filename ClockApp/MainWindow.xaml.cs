@@ -37,7 +37,7 @@ namespace ClockApp
         public static SetupModel Setup { get; private set; } = new SetupModel()
         {
             Timers = new ObservableCollection<TimerModel> {new TimerModel(1)},
-            Alarms = new ObservableCollection<AlarmModel> {new AlarmModel(1)}
+            Alarms = new ObservableCollection<AlarmModel> {new AlarmModel()}
         };
 
         public MainWindow()

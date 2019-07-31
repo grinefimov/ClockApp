@@ -11,7 +11,6 @@ namespace ClockApp.Models
 {
     public class AlarmModel : INotifyPropertyChanged
     {
-        private int _number;
         private bool _isOn;
         private bool _isAlarming = false;
         private bool _isSnoozing = false;
@@ -22,17 +21,7 @@ namespace ClockApp.Models
 
         private DateTime? _selectedTime = DateTime.MinValue;
 
-        public int Number
-        {
-            get => _number;
-            set
-            {
-                _number = value;
-                OnPropertyChanged(nameof(Number));
-            }
-        }
-
-        public string Title { get; set; }
+        public string Title { get; set; } = "Alarm";
 
         public DateTime? SelectedTime
         {
@@ -131,12 +120,6 @@ namespace ClockApp.Models
         {
         }
 
-        public AlarmModel(int number)
-        {
-            Number = number;
-            Title = "Alarm " + number.ToString();
-        }
-
         public void Snooze()
         {
             IsAlarming = false;
@@ -177,12 +160,6 @@ namespace ClockApp.Models
                 }
 
                 MainWindow.Setup.Alarms.Remove(_alarm);
-                int number = 1;
-                foreach (var t in MainWindow.Setup.Alarms)
-                {
-                    t.Number = number;
-                    number++;
-                }
 
                 if (MainWindow.Setup.Alarms.Count < AlarmsView.MaxAlarmsNumber)
                 {

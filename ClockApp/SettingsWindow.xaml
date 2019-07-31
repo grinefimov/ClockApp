@@ -50,14 +50,15 @@
                                 Margin="0,0,0,0" Click="OpenAudioFile" />
                     </Grid>
                     <Grid Grid.Row="2">
-                        <TextBlock Text="Alarm sound:" VerticalAlignment="Center" HorizontalAlignment="Left"
+                        <TextBlock Text="Snooze length:" VerticalAlignment="Center" HorizontalAlignment="Left"
                                    Margin="10,0,0,0" />
                         <TextBox Name="SnoozeLengthTextBox"
-                                 Text="{Binding SnoozeLength, UpdateSourceTrigger=PropertyChanged}" Margin="90,0,0,0"
-                                 Width="21" FontSize="18" MaxLength="2" materialDesign:ValidationAssist.UsePopup="True"
+                                 Text="{Binding SnoozeLength, UpdateSourceTrigger=PropertyChanged}" Margin="100,0,0,0"
+                                 Width="21" FontSize="18" MaxLength="2" TextAlignment="Center"
+                                 materialDesign:ValidationAssist.UsePopup="True"
                                  VerticalAlignment="Center" HorizontalAlignment="Left" />
                         <TextBlock Text="minutes" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                   Width="50" Margin="115,0,0,0">
+                                   Width="50" Margin="125,0,0,0">
                             <!--<TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>

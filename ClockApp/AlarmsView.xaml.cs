@@ -21,7 +21,7 @@ namespace ClockApp
 
         private void AddTimer(object sender, RoutedEventArgs e)
         {
-            MainWindow.Setup.Alarms.Add(new AlarmModel(MainWindow.Setup.Alarms.Count + 1));
+            MainWindow.Setup.Alarms.Add(new AlarmModel());
             if (MainWindow.Setup.Alarms.Count > MaxAlarmsNumber - 1)
             {
                 AddTimerButton.Visibility = Visibility.Hidden;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -12,8 +13,11 @@ namespace ClockApp.Models
             new System.Windows.Threading.DispatcherTimer() {Interval = new TimeSpan(0, 0, 0, 0, 1)};
 
         private readonly Stopwatch _stopwatch = new Stopwatch();
+        private readonly Stopwatch _lapStopwatch = new Stopwatch();
         private StopwatchStatus _status = StopwatchStatus.Stopped;
+        private bool _needStop = false;
         private bool _isResetButtonEnabled = false;
+        private bool _isLapButtonEnabled = false;
 
 
         private StopwatchStatus Status
@@ -39,6 +43,7 @@ namespace ClockApp.Models
             }
         }
 
+        public ObservableCollection<StopwatchModel> Laps { get; set; } = new ObservableCollection<StopwatchModel>();
         public string StartPauseResumeButtonText { get; set; } = "Start";
 
         public bool IsResetButtonEnabled
@@ -51,12 +56,23 @@ namespace ClockApp.Models
             }
         }
 
+        public bool IsLapButtonEnabled
+        {
+            get => _isLapButtonEnabled;
+            set
+            {
+                _isLapButtonEnabled = value;
+                OnPropertyChanged(nameof(IsLapButtonEnabled));
+            }
+        }
+
         public void StartPauseResume()
         {
             if (Status == StopwatchStatus.Stopped || Status == StopwatchStatus.Paused)
             {
                 Status = StopwatchStatus.Started;
                 _stopwatch.Start();
+                _lapStopwatch.Start();
                 _dispatcherTimer.Tick -= DispatcherTimerOnTick;
                 _dispatcherTimer.Tick += DispatcherTimerOnTick;
                 _dispatcherTimer.Start();
@@ -65,26 +81,50 @@ namespace ClockApp.Models
             {
                 Status = StopwatchStatus.Paused;
                 _stopwatch.Stop();
-                _dispatcherTimer.Stop();
+                _lapStopwatch.Stop();
+                _needStop = true;
             }
 
             IsResetButtonEnabled = true;
+            IsLapButtonEnabled = true;
         }
 
         public void Reset()
         {
             Status = StopwatchStatus.Stopped;
             _dispatcherTimer.Stop();
-            _stopwatch.Stop();
-            _stopwatch.Restart();
+            _stopwatch.Reset();
+            _lapStopwatch.Reset();
             TotalTime = new TimeSpan();
             LapTime = new TimeSpan();
+            IsResetButtonEnabled = false;
+            IsLapButtonEnabled = false;
+            Laps.Clear();
+        }
+
+        public void AddLap()
+        {
+            Laps.Insert(0, new StopwatchModel(Laps.Count + 1, TotalTime, LapTime));
+            if (Status == StopwatchStatus.Started)
+            {
+                _lapStopwatch.Restart();
+            }
+            else
+            {
+                _lapStopwatch.Reset();
+                LapTime = TimeSpan.Zero;
+            }
         }
 
         private void DispatcherTimerOnTick(object sender, EventArgs e)
         {
             TotalTime = _stopwatch.Elapsed;
-            LapTime = _stopwatch.Elapsed;
+            LapTime = _lapStopwatch.Elapsed;
+            if (_needStop)
+            {
+                _dispatcherTimer.Stop();
+                _needStop = false;
+            }
         }
 
         private enum StopwatchStatus
@@ -101,6 +141,8 @@ namespace ClockApp.Models
         private string _totalTimeString;
         private TimeSpan _lapTime;
         private string _lapTimeString;
+
+        public int Number { get; set; }
 
         public TimeSpan TotalTime
         {
@@ -148,8 +190,9 @@ namespace ClockApp.Models
             LapTime = new TimeSpan();
         }
 
-        public StopwatchModel(TimeSpan totalTime, TimeSpan lapTime)
+        public StopwatchModel(int number, TimeSpan totalTime, TimeSpan lapTime)
         {
+            Number = number;
             TotalTime = totalTime;
             LapTime = lapTime;
         }

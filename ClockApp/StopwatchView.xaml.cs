@@ -9,6 +9,7 @@ namespace ClockApp
         {
             this.DataContext = MainWindow.Setup.Stopwatch;
             InitializeComponent();
+            ItemsControl.ItemsSource = MainWindow.Setup.Stopwatch.Laps;
         }
 
         private void StartPauseResume(object sender, RoutedEventArgs e)
@@ -19,6 +20,11 @@ namespace ClockApp
         private void Reset(object sender, RoutedEventArgs e)
         {
             MainWindow.Setup.Stopwatch.Reset();
+        }
+
+        private void AddLap(object sender, RoutedEventArgs e)
+        {
+            MainWindow.Setup.Stopwatch.AddLap();
         }
     }
 }
