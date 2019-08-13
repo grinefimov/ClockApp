@@ -14,7 +14,7 @@
                               d:DataContext="{d:DesignInstance models:TimerNotification, IsDesignTimeCreatable=False}"
                               Height="100">
     <Grid>
-        <Border BorderBrush="#FF673AB7" BorderThickness="1,1,1,1" Padding="10">
+        <Border BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="1,1,1,1" Padding="10">
             <Grid>
                 <TextBlock Text="{Binding Message}" FontWeight="Bold" Foreground="White" TextWrapping="NoWrap"
                            FontSize="16" Margin="10,7,0,0"

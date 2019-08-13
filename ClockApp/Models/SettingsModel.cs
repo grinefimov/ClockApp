@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using ClockApp.Annotations;
+using Microsoft.Win32;
 
 namespace ClockApp.Models
 {
@@ -14,17 +15,17 @@ namespace ClockApp.Models
         private string _audioFilePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\alarm.mp3";
         private string _audioName;
         private int _snoozeLength = 10;
+        private bool _launchOnStartup = false;
+
+        private readonly RegistryKey _registryKey = Registry.CurrentUser.OpenSubKey
+            ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public double AlarmVolume
         {
             get => _alarmVolume;
-            set
-            {
-                _alarmVolume = value;
-                OnPropertyChanged(nameof(AlarmVolume));
-            }
+            set => _alarmVolume = value;
         }
 
         public string AudioFilePath
@@ -54,6 +55,20 @@ namespace ClockApp.Models
             {
                 _snoozeLength = value == 0 ? 1 : value;
                 OnPropertyChanged(nameof(SnoozeLength));
+            }
+        }
+
+        public bool LaunchOnStartup
+        {
+            get => _launchOnStartup;
+            set
+            {
+                _launchOnStartup = value;
+                if (_launchOnStartup)
+                    _registryKey.SetValue("ClockApp",
+                        Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\ClockApp.exe");
+                else
+                    _registryKey.DeleteValue("ClockApp", false);
             }
         }
 

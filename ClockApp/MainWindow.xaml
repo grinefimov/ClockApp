@@ -16,10 +16,14 @@
         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="ClockApp" Height="352" Width="345" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        Closed="Window_Closed" Icon="Resources/alarm-colored.ico">
+        Icon="Resources/alarm-colored.ico"
+        Closed="Window_Closed">
     <Window.Resources>
         <ContextMenu x:Key="NotifierContextMenu" Placement="MousePoint">
-            <MenuItem Header="Close" Click="CloseApp" />
+            <MenuItem Header="Open" Click="ShowWindow" />
+            <MenuItem Header="Settings" Click="OpenSettingsWindow" />
+            <MenuItem Header="About" Click="OpenAboutWindow" />
+            <MenuItem Header="Exit" Click="ExitApp" />
         </ContextMenu>
     </Window.Resources>
     <Grid>
@@ -31,7 +35,7 @@
                     <ListBox>
                         <ListBoxItem Content="Settings" MouseLeftButtonUp="OpenSettingsWindow" />
                         <ListBoxItem Content="About" MouseLeftButtonUp="OpenAboutWindow" />
-                        <ListBoxItem Content="Close" MouseLeftButtonUp="CloseApp" />
+                        <ListBoxItem Content="Exit" MouseLeftButtonUp="ExitApp" />
                     </ListBox>
                 </materialDesign:PopupBox>
                 <materialDesign:PackIcon Kind="AccessAlarms" Width="35" Height="34" Margin="10,0,0,0"
@@ -45,12 +49,12 @@
                 </Button>
                 <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}"
                         BorderBrush="{x:Null}" Margin="245,0,0,0"
-                        Click="HideWindow" ToolTip="To notification area">
+                        Click="ToNotificationArea" ToolTip="To notification area">
                     <materialDesign:PackIcon Kind="MinusBoxOutline" Width="20" Height="20" />
                 </Button>
                 <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}"
                         BorderBrush="{x:Null}" Margin="294,0,0,0"
-                        Click="CloseApp" ToolTip="Close">
+                        Click="ExitApp" ToolTip="Exit">
                     <materialDesign:PackIcon Kind="WindowClose" Width="20" Height="20" />
                 </Button>
             </Grid>

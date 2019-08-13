@@ -13,7 +13,7 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="ClockApp: Settings" Height="300" Width="300" ResizeMode="NoResize" WindowStyle="None"
+        Title="ClockApp: Settings" Height="310" Width="300" ResizeMode="NoResize" WindowStyle="None"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Border BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="1,1,1,1" Padding="0">
@@ -25,15 +25,16 @@
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0" MouseDown="DragMove">
                     <TextBlock />
-                    <TextBlock Text="Settings:" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,20,0,0" />
+                    <TextBlock Text="Settings:" VerticalAlignment="Center" HorizontalAlignment="Center" />
                 </Grid>
-                <Grid Grid.Row="1" Margin="20,0,20,10">
+                <Grid Grid.Row="1" Margin="20,0,20,15">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="60" />
                         <RowDefinition />
                         <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0">
+                    <Grid Grid.Row="0" Height="55">
                         <TextBlock Text="Alarm volume:" VerticalAlignment="Top" Margin="10,0,0,0" />
                         <Slider Minimum="0" Maximum="100" Value="{Binding AlarmVolume}" TickFrequency="5"
                                 VerticalAlignment="Top"
@@ -57,18 +58,26 @@
                                  Width="21" FontSize="18" MaxLength="2" TextAlignment="Center"
                                  materialDesign:ValidationAssist.UsePopup="True"
                                  VerticalAlignment="Center" HorizontalAlignment="Left" />
-                        <TextBlock Text="minutes" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                   Width="50" Margin="125,0,0,0">
-                            <!--<TextBlock.Style>
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Width="50" Margin="125,0,0,0">
+                            <TextBlock.Style>
                                 <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="minutes" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding SnoozeLength}" Value="1">
-                                            <Setter Property="TextBlock.Text" Value="FUCK"/>
+                                            <Setter Property="Text" Value="minute" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
-                            </TextBlock.Style>-->
+                            </TextBlock.Style>
                         </TextBlock>
+                    </Grid>
+                    <Grid Grid.Row="3">
+                        <TextBlock Text="Launch when system starts" VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"
+                                   Margin="10,0,0,0" />
+                        <ToggleButton IsChecked="{Binding LaunchOnStartup}"
+                                      Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                      HorizontalAlignment="Right" Margin="10,0,5,0" />
                     </Grid>
                 </Grid>
                 <Grid Grid.Row="2">

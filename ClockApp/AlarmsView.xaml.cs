@@ -17,6 +17,10 @@ namespace ClockApp
             Instance = this;
             InitializeComponent();
             ItemsControl.ItemsSource = MainWindow.Setup.Alarms;
+            if (MainWindow.Setup.Alarms.Count > MaxAlarmsNumber - 1)
+            {
+                AddTimerButton.Visibility = Visibility.Hidden;
+            }
         }
 
         private void AddTimer(object sender, RoutedEventArgs e)

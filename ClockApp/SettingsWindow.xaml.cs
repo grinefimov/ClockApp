@@ -18,6 +18,7 @@ namespace ClockApp
         private void CloseWindow(object sender, RoutedEventArgs e)
         {
             this.Close();
+            MainWindow.SettingsWindow = null;
         }
 
         private void DragMove(object sender, MouseButtonEventArgs e)

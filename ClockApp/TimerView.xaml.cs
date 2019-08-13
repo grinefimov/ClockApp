@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using ClockApp.Models;
 
 namespace ClockApp
@@ -18,6 +19,10 @@ namespace ClockApp
             Instance = this;
             InitializeComponent();
             ItemsControl.ItemsSource = MainWindow.Setup.Timers;
+            if (MainWindow.Setup.Timers.Count > MaxTimersNumber - 1)
+            {
+                AddTimerButton.Visibility = Visibility.Hidden;
+            }
         }
 
         private void TimePicker_Initialized(object sender, EventArgs e)

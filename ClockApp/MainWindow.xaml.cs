@@ -17,8 +17,11 @@ namespace ClockApp
 {
     public partial class MainWindow : Window
     {
+        private readonly bool _firstLaunch = false;
         private readonly bool _foundSetup = false;
-        private NotifyIcon NotificationAreaIcon { get; set; } = new NotifyIcon();
+        private NotifyIcon _notificationAreaIcon { get; set; } = new NotifyIcon();
+        public static Window SettingsWindow { get; set; }
+        public static Window AboutWindow { get; set; }
 
         public static MediaPlayer Player { get; set; } = new MediaPlayer();
 
@@ -88,6 +91,11 @@ namespace ClockApp
 
             #endregion
 
+            if (Settings.LaunchOnStartup == true)
+            {
+                _firstLaunch = true;
+            }
+
             InitializeComponent();
 
             if (_foundSetup)
@@ -106,20 +114,22 @@ namespace ClockApp
                 }
             }
 
-            NotificationAreaIcon.Icon = new Icon(System.Windows.Application.GetResourceStream(
+            _notificationAreaIcon.Icon = new Icon(System.Windows.Application.GetResourceStream(
                 new Uri("pack://application:,,,/Resources/alarm-colored-bg.ico")).Stream);
-            NotificationAreaIcon.Visible = false;
-            NotificationAreaIcon.MouseClick += OpenWindow;
-            NotificationAreaIcon.MouseDown += OpenNotifierContextMenu;
+            _notificationAreaIcon.Visible = false;
+            _notificationAreaIcon.MouseClick += ShowWindow;
+            _notificationAreaIcon.MouseDown += OpenNotifierContextMenu;
+
+            if (_firstLaunch == true)
+            {
+                _firstLaunch = false;
+                ToNotificationArea(this, new RoutedEventArgs());
+            }
         }
 
-        private void CloseApp(object sender, RoutedEventArgs e)
+        private void ExitApp(object sender, RoutedEventArgs e)
         {
-            if (AlarmsTab.IsSelected) Setup.SelectedTab = SetupModel.ClockAppTabs.Alarms;
-            else if (StopwatchTab.IsSelected) Setup.SelectedTab = SetupModel.ClockAppTabs.Stopwatch;
-            else Setup.SelectedTab = SetupModel.ClockAppTabs.Timer;
-            Serializer.WriteToXmlFile(Environment.GetFolderPath(
-                                          Environment.SpecialFolder.LocalApplicationData) + "\\ClockApp\\setup", Setup);
+            Window_Closed(this, EventArgs.Empty);
             System.Windows.Application.Current.Shutdown();
         }
 
@@ -134,26 +144,39 @@ namespace ClockApp
             this.WindowState = WindowState.Minimized;
         }
 
-        private void HideWindow(object sender, RoutedEventArgs e)
+        private void ToNotificationArea(object sender, RoutedEventArgs e)
         {
             this.Hide();
-            NotificationAreaIcon.Visible = true;
+            _notificationAreaIcon.Visible = true;
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            NotificationAreaIcon.Visible = false;
+            _notificationAreaIcon.Visible = false;
+            if (AlarmsTab.IsSelected) Setup.SelectedTab = SetupModel.ClockAppTabs.Alarms;
+            else if (StopwatchTab.IsSelected) Setup.SelectedTab = SetupModel.ClockAppTabs.Stopwatch;
+            else Setup.SelectedTab = SetupModel.ClockAppTabs.Timer;
+            Serializer.WriteToXmlFile(Environment.GetFolderPath(
+                                          Environment.SpecialFolder.LocalApplicationData) + "\\ClockApp\\setup", Setup);
         }
 
-        private void OpenWindow(object sender, MouseEventArgs e)
+        private void ShowWindow(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
                 this.Show();
                 this.WindowState = WindowState.Normal;
                 Icon.Focus(); // To hide "To notification area" tooltip
-                NotificationAreaIcon.Visible = false;
+                _notificationAreaIcon.Visible = false;
             }
+        }
+
+        private void ShowWindow(object sender, RoutedEventArgs e)
+        {
+            this.Show();
+            this.WindowState = WindowState.Normal;
+            Icon.Focus(); // To hide "To notification area" tooltip
+            _notificationAreaIcon.Visible = false;
         }
 
         private void OpenNotifierContextMenu(object sender, MouseEventArgs e)
@@ -165,16 +188,24 @@ namespace ClockApp
             }
         }
 
-        private void OpenSettingsWindow(object sender, MouseButtonEventArgs e)
+        private void OpenSettingsWindow(object sender, RoutedEventArgs e)
         {
-            Window settingsWindow = new SettingsWindow();
-            settingsWindow.Show();
+            if (SettingsWindow == null)
+            {
+                SettingsWindow = new SettingsWindow();
+                SettingsWindow.Show();
+            }
+            else SettingsWindow.Focus();
         }
 
-        private void OpenAboutWindow(object sender, MouseButtonEventArgs e)
+        private void OpenAboutWindow(object sender, RoutedEventArgs e)
         {
-            Window aboutWindow = new AboutWindow();
-            aboutWindow.Show();
+            if (AboutWindow == null)
+            {
+                AboutWindow = new AboutWindow();
+                AboutWindow.Show();
+            }
+            else AboutWindow.Focus();
         }
 
         public static void PlayAudio()
@@ -187,16 +218,6 @@ namespace ClockApp
 
     public class Serializer
     {
-        /// <summary>
-        /// Writes the given object instance to an XML file.
-        /// <para>Only Public properties and variables will be written to the file. These can be any type though, even other classes.</para>
-        /// <para>If there are public properties/variables that you do not want written to the file, decorate them with the [XmlIgnore] attribute.</para>
-        /// <para>Object type must have a parameterless constructor.</para>
-        /// </summary>
-        /// <typeparam name="T">The type of object being written to the file.</typeparam>
-        /// <param name="filePath">The file path to write the object instance to.</param>
-        /// <param name="objectToWrite">The object instance to write to the file.</param>
-        /// <param name="append">If false the file will be overwritten if it already exists. If true the contents will be appended to the file.</param>
         public static void WriteToXmlFile<T>(string filePath, T objectToWrite, bool append = false) where T : new()
         {
             TextWriter writer = null;
@@ -212,13 +233,6 @@ namespace ClockApp
             }
         }
 
-        /// <summary>
-        /// Reads an object instance from an XML file.
-        /// <para>Object type must have a parameterless constructor.</para>
-        /// </summary>
-        /// <typeparam name="T">The type of object to read from the file.</typeparam>
-        /// <param name="filePath">The file path to read the object instance from.</param>
-        /// <returns>Returns a new instance of the object read from the XML file.</returns>
         public static T ReadFromXmlFile<T>(string filePath) where T : new()
         {
             TextReader reader = null;
