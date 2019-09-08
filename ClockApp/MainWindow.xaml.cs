@@ -19,7 +19,7 @@ namespace ClockApp
     {
         private readonly bool _firstLaunch = false;
         private readonly bool _foundSetup = false;
-        private NotifyIcon _notificationAreaIcon { get; set; } = new NotifyIcon();
+        private readonly NotifyIcon _notificationAreaIcon = new NotifyIcon();
         public static Window SettingsWindow { get; set; }
         public static Window AboutWindow { get; set; }
 
@@ -117,7 +117,7 @@ namespace ClockApp
             _notificationAreaIcon.Icon = new Icon(System.Windows.Application.GetResourceStream(
                 new Uri("pack://application:,,,/Resources/alarm-colored-bg.ico")).Stream);
             _notificationAreaIcon.Visible = false;
-            _notificationAreaIcon.MouseClick += ShowWindow;
+            _notificationAreaIcon.MouseDoubleClick += ShowWindow;
             _notificationAreaIcon.MouseDown += OpenNotifierContextMenu;
 
             if (_firstLaunch == true)
@@ -183,7 +183,7 @@ namespace ClockApp
         {
             if (e.Button == MouseButtons.Right)
             {
-                var menu = (System.Windows.Controls.ContextMenu) this.FindResource("NotifierContextMenu");
+                var menu = (System.Windows.Controls.ContextMenu)this.FindResource("NotifierContextMenu");
                 menu.IsOpen = true;
             }
         }
