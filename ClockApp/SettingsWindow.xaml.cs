@@ -33,6 +33,7 @@ namespace ClockApp
                                           Environment.SpecialFolder.LocalApplicationData) + "\\ClockApp\\settings",
                 MainWindow.Settings);
             this.Close();
+            MainWindow.SettingsWindow = null;
         }
 
         private void SetDefaultSettings(object sender, RoutedEventArgs e)

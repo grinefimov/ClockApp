@@ -22,7 +22,6 @@ namespace ClockApp
         private readonly NotifyIcon _notificationAreaIcon = new NotifyIcon();
         public static Window SettingsWindow { get; set; }
         public static Window AboutWindow { get; set; }
-
         public static MediaPlayer Player { get; set; } = new MediaPlayer();
 
         public static Notifier Notifier { get; set; } = new Notifier(cfg =>
@@ -183,7 +182,7 @@ namespace ClockApp
         {
             if (e.Button == MouseButtons.Right)
             {
-                var menu = (System.Windows.Controls.ContextMenu)this.FindResource("NotifierContextMenu");
+                var menu = (System.Windows.Controls.ContextMenu) this.FindResource("NotifierContextMenu");
                 menu.IsOpen = true;
             }
         }
