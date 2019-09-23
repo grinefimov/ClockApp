@@ -213,6 +213,11 @@ namespace ClockApp
             Player.Volume = Settings.AlarmVolume / 100;
             Player.Play();
         }
+
+        private void PinTopmost(object sender, RoutedEventArgs e)
+        {
+            this.Topmost = this.Topmost == false;
+        }
     }
 
     public class Serializer

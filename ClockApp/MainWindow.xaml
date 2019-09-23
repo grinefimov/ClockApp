@@ -43,6 +43,14 @@
                                          VerticalAlignment="Center" Name="Icon" />
                 <TextBlock Text="CLOCK" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="22"
                            Foreground="{DynamicResource PrimaryHueMidBrush}" Margin="75,0,0,0" FontWeight="Bold" />
+                <ToggleButton HorizontalAlignment="Left" VerticalAlignment="Center" Margin="164,0,0,0"
+                              Style="{StaticResource MaterialDesignActionToggleButton}"
+                              IsChecked="False" Click="PinTopmost">
+                    <materialDesign:PackIcon Kind="PinOutline" Height="20" Width="20" />
+                    <materialDesign:ToggleButtonAssist.OnContent>
+                        <materialDesign:PackIcon Kind="Pin" Height="20" Width="20" />
+                    </materialDesign:ToggleButtonAssist.OnContent>
+                </ToggleButton>
                 <Button HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}"
                         BorderBrush="{x:Null}" Margin="196,0,0,0"
                         Click="MinimizeApp" ToolTip="Minimize">
