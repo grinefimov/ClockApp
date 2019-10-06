@@ -116,7 +116,7 @@ namespace ClockApp
             _notificationAreaIcon.Icon = new Icon(System.Windows.Application.GetResourceStream(
                 new Uri("pack://application:,,,/Resources/alarm-colored-bg.ico")).Stream);
             _notificationAreaIcon.Visible = false;
-            _notificationAreaIcon.MouseDoubleClick += ShowWindow;
+            _notificationAreaIcon.MouseDoubleClick += ShowMainWindow;
             _notificationAreaIcon.MouseDown += OpenNotifierContextMenu;
 
             if (_firstLaunch == true)
@@ -159,22 +159,25 @@ namespace ClockApp
                                           Environment.SpecialFolder.LocalApplicationData) + "\\ClockApp\\setup", Setup);
         }
 
-        private void ShowWindow(object sender, MouseEventArgs e)
+        private void ShowMainWindow(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                this.Show();
-                this.WindowState = WindowState.Normal;
-                Icon.Focus(); // To hide "To notification area" tooltip
-                _notificationAreaIcon.Visible = false;
+                ShowWindow();
             }
         }
 
-        private void ShowWindow(object sender, RoutedEventArgs e)
+        private void ShowMainWindow(object sender, RoutedEventArgs e)
+        {
+            ShowWindow();
+        }
+
+        private void ShowWindow()
         {
             this.Show();
             this.WindowState = WindowState.Normal;
             Icon.Focus(); // To hide "To notification area" tooltip
+            this.Focus();
             _notificationAreaIcon.Visible = false;
         }
 

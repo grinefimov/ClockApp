@@ -21,7 +21,7 @@
         Closed="Window_Closed">
     <Window.Resources>
         <ContextMenu x:Key="NotifierContextMenu" Placement="MousePoint">
-            <MenuItem Header="Open" Click="ShowWindow" />
+            <MenuItem Header="Open" Click="ShowMainWindow" />
             <MenuItem Header="Settings" Click="OpenSettingsWindow" />
             <MenuItem Header="About" Click="OpenAboutWindow" />
             <MenuItem Header="Exit" Click="ExitApp" />
